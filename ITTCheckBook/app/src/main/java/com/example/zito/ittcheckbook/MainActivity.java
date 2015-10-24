@@ -10,7 +10,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements View.OnClickListener {
 
     EditText acctNumber, firstName, lastName, bankName, bankBalance, txtDate, txtNotes;
-    Button btnAdd, btnDelete, btnUpdate;
+    Button btnAdd, btnView, btnUpdate;
     Zacct_Helper db;
 
     @Override
@@ -28,34 +28,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
         txtNotes = (EditText) findViewById(R.id.txtNotes);
         // *** Button on the screen
         btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnDelete = (Button) findViewById(R.id.btnDelete);
+        btnView = (Button) findViewById(R.id.btnView);
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
 
         db = new Zacct_Helper(this);
 
         // *** cALL THE LISTENERS  *****
         btnAdd.setOnClickListener(this);
-        btnUpdate.setOnClickListener(this);
+        btnView.setOnClickListener(this);
 
 
     }
 
     @Override
     public void onClick(View v) {
-        if (v == btnAdd) {
+        if (v == btnAdd)
+        {
             insert();
             clearText();
 
         }
-        if (v==btnUpdate)
+        if (v == btnView)
         {
+            zDisplay();
+            clearText();
+
 
         }
     }
 
     private void insert()
     {
-        //String zaccount = acctNumber.getText().toString();
         String actnumber = acctNumber.getText().toString().trim();
         String fname = firstName.getText().toString().trim();
         String lname = lastName.getText().toString().trim();
@@ -65,6 +68,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String actnotes = txtNotes.getText().toString().trim();
         db.addAccount(actnumber, fname, lname, bkname, bkbalance, actdate, actnotes);
         Toast.makeText(this, "The Account was created !", Toast.LENGTH_SHORT).show();
+
+    }
+
+    // *** Display - View record ****
+    public void zDisplay()
+    {
+
+       // String firstName = db.getfname();
+
+        Toast.makeText(this, "Displaying a RECORD !", Toast.LENGTH_LONG).show();
 
     }
 

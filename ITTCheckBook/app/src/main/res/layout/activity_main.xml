@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#fff8dc">
+    android:background="#ccffff">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -218,11 +218,11 @@
             android:text="ADD" />
 
         <Button
-            android:id="@+id/btnDelete"
+            android:id="@+id/btnView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="DELETE" />
+            android:text="VIEW" />
 
         <Button
             android:id="@+id/btnUpdate"
@@ -233,4 +233,25 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="DELETE" />
+
+        <Button
+            android:id="@+id/btnAppInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="APP INFO" />
+
+    </LinearLayout>
 </LinearLayout>

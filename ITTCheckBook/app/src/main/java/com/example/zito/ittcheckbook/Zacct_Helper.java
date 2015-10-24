@@ -44,7 +44,7 @@ public class Zacct_Helper extends SQLiteOpenHelper {
 
     }
 
-    // Delete the table and ceate a new table - if needed
+    // Delete the table and create a new table - if needed
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String sql = ("DROP TABLE IF EXISTS account");
@@ -70,11 +70,21 @@ public class Zacct_Helper extends SQLiteOpenHelper {
     }
 
     //Position cursor to start reading records ---> For view records process
-    public Cursor getAccount(int acctNumber) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM account WHERE acctNumber="+ acctNumber + "", null);
-        return c;
 
+    public Cursor getAccount() {
+     /*   SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "select * from " + TABLE_NAME + " where " + ACCT_NUMBER + " =?" + ACCT_NUMBER;
+        Cursor c = db.rawQuery(selectQuery,null);
+ */
+
+
+
+        String zQuery = "select * from " + TABLE_NAME + " where " + ACCT_NUMBER + " =?" + ACCT_NUMBER;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(zQuery,null);
+        if (c != null)
+            c.moveToFirst();
+        return c;
 
     }
 }
