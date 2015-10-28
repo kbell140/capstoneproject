@@ -1,6 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f5e5de">
     android:orientation="vertical"
     android:background="#dfffff">
 
@@ -19,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/title"
+                android:text="@string/trans"
                 android:textColor="#890000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -35,12 +38,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
-                android:text="@string/acctnum"
+                android:text="@string/tbalance"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/acctNumber"
+                android:id="@+id/trBalance"
                 android:inputType="number"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
@@ -50,7 +53,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/box_text"
                 android:textSize="18sp" />
-                <requestFocus/>
+            <requestFocus/>
 
         </TableRow>
 
@@ -63,12 +66,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
-                android:text="@string/afname"
+                android:text="@string/tid"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/firstName"
+                android:id="@+id/trId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dip"
@@ -88,12 +91,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
-                android:text="@string/alname"
+                android:text="@string/tdate"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/lastName"
+                android:id="@+id/trDate"
+                android:hint="@string/tdateformat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dip"
@@ -113,12 +117,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
-                android:text="@string/abname"
+                android:text="@string/ttype"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/bankName"
+                android:id="@+id/trType"
+                android:hint="@string/cd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dip"
@@ -138,12 +143,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
-                android:text="@string/abalance"
+                android:text="@string/tamount"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/bankBalance"
+                android:id="@+id/trAmount"
                 android:inputType="numberDecimal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -164,39 +169,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dip"
-                android:text="@string/adate"
+                android:text="@string/tnotes"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
             <EditText
-                android:id="@+id/acctDate"
-                android:inputType="date"
-                android:hint="@string/adate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dip"
-                android:layout_marginRight="20dip"
-                android:layout_weight="1"
-                android:background="@drawable/box_text"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dip">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:text="@string/anotes"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/acctNotes"
+                android:id="@+id/trNotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dip"
@@ -259,11 +237,12 @@
 
 
         <Button
-            android:id="@+id/btnTransactions"
+            android:id="@+id/btnExit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:text="TRANSACTIONS" />
+            android:text="EXIT" />
 
     </LinearLayout>
+
 </LinearLayout>

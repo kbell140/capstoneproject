@@ -2,12 +2,11 @@ package com.example.zito.ittcheckbook;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by Zito on 10/13/2015.
+ * Created by Zito on 10/13/2015 ^^ updated 10/27/2015.
  */
 public class Zacct_Helper extends SQLiteOpenHelper {
 
@@ -27,12 +26,12 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    // Calling the constructor
+    //**** Calling the constructor
     public Zacct_Helper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
-    // Creating the account table
+    //**** Creating the account table
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE " + TABLE_NAME
@@ -44,7 +43,7 @@ public class Zacct_Helper extends SQLiteOpenHelper {
 
     }
 
-    // Delete the table and create a new table - if needed
+    //**** Delete the table and create a new table - if needed
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String sql = ("DROP TABLE IF EXISTS account");
@@ -52,7 +51,7 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-        // Enter records
+        //**** Enter records
     public boolean addAccount(String actnumber, String fname, String lname, String bkname, String bkbalance, String actdate, String actnotes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -65,26 +64,8 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         contentValues.put(ACCT_NOTES, actnotes);
 
         db.insert(TABLE_NAME, null, contentValues);
-        db.close();
+       // db.close();
         return true;
     }
 
-    //Position cursor to start reading records ---> For view records process
-
-    public Cursor getAccount() {
-     /*   SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "select * from " + TABLE_NAME + " where " + ACCT_NUMBER + " =?" + ACCT_NUMBER;
-        Cursor c = db.rawQuery(selectQuery,null);
- */
-
-
-
-        String zQuery = "select * from " + TABLE_NAME + " where " + ACCT_NUMBER + " =?" + ACCT_NUMBER;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery(zQuery,null);
-        if (c != null)
-            c.moveToFirst();
-        return c;
-
-    }
 }

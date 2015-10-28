@@ -3,4 +3,24 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="title">ACCOUNT Info</string>
+    <string name="acctnum">Acct. Number:</string>
+    <string name="afname">First Name:</string>
+    <string name="alname">Last Name:</string>
+    <string name="abname">Bank Name:</string>
+    <string name="abalance">Balance:</string>
+    <string name="adate">mm/dd/yyyy</string>
+    <string name="anotes">Notes:</string>
+    <string name="trans">TRANSACTIONS</string>
+    <string name="tbalance">Balance:</string>
+    <string name="tid">Trans. ID:</string>
+    <string name="tdate">Date:</string>
+    <string name="ttype">Trans. Type:</string>
+    <string name="tamount">Amount:</string>
+    <string name="tnotes">Notes:</string>
+    <string name="cd">C/D:</string>
+    <string name="tdateformat">mm/dd/yyyy</string>
+
+
 </resources>
