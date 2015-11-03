@@ -10,16 +10,20 @@
     <string name="alname">Last Name:</string>
     <string name="abname">Bank Name:</string>
     <string name="abalance">Balance:</string>
-    <string name="adate">mm/dd/yyyy</string>
+    <string name="adate">Date:</string>
+    <string name="dateformat">mm/dd/yyyy</string>
     <string name="anotes">Notes:</string>
+
     <string name="trans">TRANSACTIONS</string>
-    <string name="tbalance">Balance:</string>
+    <string name="zacct">Account #:</string>
+    <string name="zowner">Account Owner:</string>
+    <string name="tbalance">Current Balance:</string>
     <string name="tid">Trans. ID:</string>
-    <string name="tdate">Date:</string>
+    <string name="tdate">Trans. Date:</string>
     <string name="ttype">Trans. Type:</string>
     <string name="tamount">Amount:</string>
     <string name="tnotes">Notes:</string>
-    <string name="cd">C/D:</string>
+    <string name="cd">C/D</string>
     <string name="tdateformat">mm/dd/yyyy</string>
 
 

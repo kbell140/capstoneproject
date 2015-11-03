@@ -11,6 +11,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Zacct_Helper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "account_DB";
+    private static final int DB_VERSION = 1;
+
+    //*******Account Table ******
     public static final String TABLE_NAME = "account";
     public static final String ACCT_NUMBER = "acctNumber";
     public static final String FIRST_NAME = "firstName";
@@ -20,34 +23,46 @@ public class Zacct_Helper extends SQLiteOpenHelper {
     public static final String ACCT_DATE = "acctDate";
     public static final String ACCT_NOTES = "acctNotes";
 
-    private static final int DB_VERSION = 1;
+    //******** Transactions Table *******
+    public static final String TRTABLE_NAME = "transactions";
+    public static final String TRAN_ID = "tranID";
+    public static final String TRAN_ACTN = "tranAccount";
+    public static final String TRAN_TYPE = "tranType";
+    public static final String TRAN_AMOUNT = "tranAmount";
+    public static final String TRAN_DATE = "tranDate";
+    public static final String TRAN_NOTES = "tranNotes";
 
+    //***** Calling Constructor *****
     public Zacct_Helper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    //**** Calling the constructor
-    public Zacct_Helper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
-    }
-
-    //**** Creating the account table
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE " + TABLE_NAME
+    //***=================
+    public static final String TABLE_ACCOUNT = "CREATE TABLE " + TABLE_NAME
                 + "(" + ACCT_NUMBER + " INTEGER PRIMARY KEY,"
                 + FIRST_NAME + " TEXT," + LAST_NAME + " TEXT," + BANK_NAME + " TEXT,"
                 + BANK_BALANCE + " DOUBLE," + ACCT_DATE + " TEXT," + ACCT_NOTES + " TEXT);";
 
-        db.execSQL(sql);
+    public static final String TABLE_TRANS = "CREATE TABLE " + TRTABLE_NAME
+            + "(" + TRAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + TRAN_ACTN + " INTEGER," + TRAN_TYPE + " TEXT,"
+            + TRAN_AMOUNT + " DOUBLE," + TRAN_DATE + " TEXT," + TRAN_NOTES + " TEXT);";
 
+
+    //***** Creating ******
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(TABLE_ACCOUNT);
+        db.execSQL(TABLE_TRANS);
     }
 
-    //**** Delete the table and create a new table - if needed
+        //**** Delete the table and create a new table - if needed
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = ("DROP TABLE IF EXISTS account");
-        db.execSQL(sql);
+   //     String sql = ("DROP TABLE IF EXISTS " + TABLE_ACCOUNT);
+     //   String sql_tr = ("DROP TABLE IF EXISTS " + TABLE_TRANS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TRTABLE_NAME);
         onCreate(db);
     }
 
@@ -67,5 +82,21 @@ public class Zacct_Helper extends SQLiteOpenHelper {
        // db.close();
         return true;
     }
+
+    //****** TRANSACTIONS ******
+    public boolean addtrans(String ztrAcct, String ztrType, String ztrAmount, String ztrDate,String ztrNotes) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TRAN_ACTN, ztrAcct);
+        contentValues.put(TRAN_TYPE, ztrType);
+        contentValues.put(TRAN_AMOUNT, ztrAmount);
+        contentValues.put(TRAN_DATE, ztrDate);
+        contentValues.put(TRAN_NOTES, ztrNotes);
+
+        db.insert(TRTABLE_NAME, null, contentValues);
+        // db.close();
+        return true;
+    }
+
 
 }

@@ -171,7 +171,7 @@
             <EditText
                 android:id="@+id/acctDate"
                 android:inputType="date"
-                android:hint="@string/adate"
+                android:hint="@string/dateformat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dip"
@@ -259,10 +259,10 @@
 
 
         <Button
-            android:id="@+id/btnTransactions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:onClick="btnTransactions"
             android:text="TRANSACTIONS" />
 
     </LinearLayout>

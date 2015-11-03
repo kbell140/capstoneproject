@@ -1,6 +1,7 @@
 package com.example.zito.ittcheckbook;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,12 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Created by Zito on 10/13/2015  *** Updated 10/27/2015.
+ * Created by Zito on 10/13/2015  *** Updated 11/01/2015.
  */
 public class MainActivity extends Activity implements View.OnClickListener {
 
     EditText acctNumber, firstName, lastName, bankName, bankBalance, acctDate, acctNotes;
-    Button btnAdd, btnView, btnUpdate, btnList, btnDelete, btnTransactions;
+    Button btnAdd, btnView, btnUpdate, btnList, btnDelete;
+    //btnTransactions;
     Zacct_Helper db;
     SQLiteDatabase zb;
 
@@ -39,7 +41,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
         btnDelete = (Button) findViewById(R.id.btnDelete);
         btnList = (Button) findViewById(R.id.btnList);
-        btnTransactions = (Button) findViewById(R.id.btnTransactions);
 
         db = new Zacct_Helper(this);
         zb = db.getWritableDatabase();
@@ -50,7 +51,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
         btnList.setOnClickListener(this);
-        btnTransactions.setOnClickListener(this);
     }
 
     @Override
@@ -146,14 +146,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
             clearText();
         }
 
-        //***** To Transactions ******
-        if ( v == btnTransactions) {
-            Toast.makeText(this, "To Transactions screen....", Toast.LENGTH_SHORT).show();
-        }
-
-
     }  //** End of OnClick View
 
+    //******To Transactions OnClick Button *****
+    public void btnTransactions(View v) {
+
+        String xAcctNum = acctNumber.getText().toString();
+
+        Intent intent = new Intent(MainActivity.this, Transactions.class);
+
+        intent.putExtra("xaccount", acctNumber.getText().toString());
+        intent.putExtra("xfname", firstName.getText().toString());
+        intent.putExtra("xbalan", bankBalance.getText().toString());
+
+        startActivity(intent);
+    }
 
     //***** ADD Records *****
     private void insert() {
@@ -166,10 +173,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String actnotes = acctNotes.getText().toString().trim();
         db.addAccount(actnumber, fname, lname, bkname, bkbalance, actdate, actnotes);
         Toast.makeText(this, "The Account was created !", Toast.LENGTH_SHORT).show();
-
     }
 
-    //***** Clear fields on screen  *****
+    //***** Clear fields from screen  *****
     public void clearText() {
         acctNumber.setText("");
         firstName.setText("");
@@ -191,7 +197,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 }  //End of Program
-
 
 // *****  Code below do not apply for the current project **********
 /*
