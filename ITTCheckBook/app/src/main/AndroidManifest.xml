@@ -21,6 +21,7 @@
             android:name=".Transactions">
 
         </activity>
+        <activity android:name=".TransLista"></activity>
 
     </application>
 

@@ -2,6 +2,7 @@ package com.example.zito.ittcheckbook;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -25,7 +26,7 @@ public class Zacct_Helper extends SQLiteOpenHelper {
 
     //******** Transactions Table *******
     public static final String TRTABLE_NAME = "transactions";
-    public static final String TRAN_ID = "tranID";
+    public static final String TRAN_ID = "_id";
     public static final String TRAN_ACTN = "tranAccount";
     public static final String TRAN_TYPE = "tranType";
     public static final String TRAN_AMOUNT = "tranAmount";
@@ -96,6 +97,19 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         db.insert(TRTABLE_NAME, null, contentValues);
         // db.close();
         return true;
+    }
+
+    public Cursor readData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String[] allCols = new String[] {
+                TRAN_ID, TRAN_ACTN, TRAN_TYPE, TRAN_AMOUNT, TRAN_DATE, TRAN_NOTES};
+
+        Cursor c = db.query(TRTABLE_NAME, allCols, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
     }
 
 
