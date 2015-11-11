@@ -11,10 +11,11 @@
     <string name="abname">Bank Name:</string>
     <string name="abalance">Starting Balance:</string>
     <string name="adate">Date:</string>
+    <string name="rbalance">Running Balance:</string>
     <string name="dateformat">mm/dd/yyyy</string>
     <string name="anotes">Notes:</string>
 
-    <string name="trans">TRANSACTIONS</string>
+    <string name="trans">ADD TRANSACTIONS</string>
     <string name="zacct">Account #:</string>
     <string name="zowner">Account Owner:</string>
     <string name="tbalance">Current Balance:</string>
@@ -23,6 +24,16 @@
     <string name="ttype">Trans. Type:</string>
     <string name="tamount">Amount:</string>
     <string name="tnotes">Notes:</string>
+
+    <string name="jtrans">UPDATE TRANSACTIONS</string>
+    <string name="jxacct">Account #:</string>
+    <string name="jxowner">Account Owner:</string>
+    <string name="jxbalance">Current Balance:</string>
+    <string name="jxid">Trans. ID:</string>
+    <string name="jxdate">Trans. Date:</string>
+    <string name="jxtype">Trans. Type:</string>
+    <string name="jxamount">Amount:</string>
+    <string name="jxnotes">Notes:</string>
 
     <string-array name="trans_tipos">
         <item>DEBIT</item>

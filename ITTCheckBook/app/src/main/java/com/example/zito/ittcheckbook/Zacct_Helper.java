@@ -22,6 +22,7 @@ public class Zacct_Helper extends SQLiteOpenHelper {
     public static final String BANK_NAME = "bankName";
     public static final String BANK_BALANCE = "bankBalance";
     public static final String ACCT_DATE = "acctDate";
+    public static final String RUN_BALANCE = "runBalance";
     public static final String ACCT_NOTES = "acctNotes";
 
     //******** Transactions Table *******
@@ -42,7 +43,8 @@ public class Zacct_Helper extends SQLiteOpenHelper {
     public static final String TABLE_ACCOUNT = "CREATE TABLE " + TABLE_NAME
                 + "(" + ACCT_NUMBER + " INTEGER PRIMARY KEY,"
                 + FIRST_NAME + " TEXT," + LAST_NAME + " TEXT," + BANK_NAME + " TEXT,"
-                + BANK_BALANCE + " DOUBLE," + ACCT_DATE + " TEXT," + ACCT_NOTES + " TEXT);";
+                + BANK_BALANCE + " DOUBLE," + ACCT_DATE + " TEXT,"
+                + RUN_BALANCE + " DOUBLE," + ACCT_NOTES + " TEXT);";
 
     public static final String TABLE_TRANS = "CREATE TABLE " + TRTABLE_NAME
             + "(" + TRAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -68,7 +70,8 @@ public class Zacct_Helper extends SQLiteOpenHelper {
     }
 
         //**** Enter records
-    public boolean addAccount(String actnumber, String fname, String lname, String bkname, String bkbalance, String actdate, String actnotes) {
+    public boolean addAccount(String actnumber, String fname, String lname, String bkname,
+                              String bkbalance, String actdate, String rnbalance, String actnotes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ACCT_NUMBER, actnumber);
@@ -77,6 +80,7 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         contentValues.put(BANK_NAME, bkname);
         contentValues.put(BANK_BALANCE, bkbalance);
         contentValues.put(ACCT_DATE, actdate);
+        contentValues.put(RUN_BALANCE, rnbalance);
         contentValues.put(ACCT_NOTES, actnotes);
 
         db.insert(TABLE_NAME, null, contentValues);

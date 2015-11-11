@@ -15,12 +15,13 @@ import java.util.Calendar;
  */
 public class DateDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    TextView trDate;
+    TextView trDate,jrDate;
     TextView acctDate;
     public DateDialog(View view) {
 
         trDate=(TextView)view;
         acctDate=(TextView)view;
+        jrDate=(TextView)view;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class DateDialog extends DialogFragment implements DatePickerDialog.OnDat
        // String date=day+"/"+(month+1)+"/"+year;
         acctDate.setText(date);
         trDate.setText(date);
+        jrDate.setText(date);
 
     }
 }

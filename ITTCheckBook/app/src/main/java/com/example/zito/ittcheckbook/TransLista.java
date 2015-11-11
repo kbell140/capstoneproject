@@ -6,9 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 /**
  * Created by Julio C. on 11/7/2015.
@@ -16,6 +18,8 @@ import android.widget.SimpleCursorAdapter;
 public class TransLista extends AppCompatActivity {
     Button btnAdd;
     ListView listAccts;
+    TextView jtid, jtacct, jttype, jtamount, jtdate;
+    String zvAcct, zvBalan;
 
     Zacct_Helper db;
     SQLiteDatabase zb;
@@ -62,5 +66,37 @@ public class TransLista extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         listAccts.setAdapter(adapter);
 
+        //****** If List item is cliked *******
+        ///***=============================**
+        listAccts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+             //   TextView jtacct = (TextView) findViewById(R.id.z_tacct);
+              //  jtacct.setText(getIntent().getExtras().getString("xaccount"));
+              //  TextView vfname = (TextView) findViewById(R.id.zOwner);
+             //   vfname.setText(getIntent().getExtras().getString("xfname"));
+              //  TextView vBalan = (TextView) findViewById(R.id.trBalance);
+              //  vBalan.setText(getIntent().getExtras().getString("xbalan"));
+/*
+
+                zvAcct = jtacct.getText().toString().trim();
+                zvBalan = vBalan.getText().toString().trim();
+
+                Double xBalan = Double.parseDouble(zvBalan);
+                DecimalFormat zcur = new DecimalFormat("$###,###.##");
+                String zBal = zcur.format(xBalan);
+                vBalan.setText(zBal);
+*/
+
+                Intent iput = new Intent(TransLista.this, TransUpdel.class);
+                iput.putExtra("xaccount", vAcct);
+                iput.putExtra("xfname", vfname);
+                iput.putExtra("xbalan", vBalan);
+                startActivity(iput);
+
+
+            }
+        });
     }
 }

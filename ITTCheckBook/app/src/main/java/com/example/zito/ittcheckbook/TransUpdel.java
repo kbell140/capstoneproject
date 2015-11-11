@@ -3,7 +3,6 @@ package com.example.zito.ittcheckbook;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -12,21 +11,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Julio C. on 10/27/2015
+ * Created by Zito on 11/9/2015.
  */
-public class Transactions extends Activity implements View.OnClickListener {
+public class TransUpdel extends Activity implements View.OnClickListener {
 
-    EditText trAmount, trNotes;
-    Button btnAdd, btnView;
-    Spinner tr_tipos;
+    EditText jAmount, jNotes;
+    Button btnUpdate, btnDelete;
+    Spinner jr_tipos;
 
     String zvAcct = "";
     String zvBalan = "";
@@ -38,19 +35,29 @@ public class Transactions extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.transactions);
+        setContentView(R.layout.trans_updel);
 
         db = new Zacct_Helper(this);
         zb = db.getWritableDatabase();
 
         // *** Display the Account Info screen  *****
 
-        TextView vAcct = (TextView) findViewById(R.id.zAcct);
+/*
+        Intent intent = getIntent();
+        final String vAcct = intent.getStringExtra("xaccount");
+        final String vfname = intent.getStringExtra("xfname");
+        final String vBalan = intent.getStringExtra("xbalan");
+*/
+        TextView vAcct = (TextView) findViewById(R.id.jAcct);
         vAcct.setText(getIntent().getExtras().getString("xaccount"));
-        TextView vfname = (TextView) findViewById(R.id.zOwner);
+        TextView vfname = (TextView) findViewById(R.id.jOwner);
         vfname.setText(getIntent().getExtras().getString("xfname"));
-        TextView vBalan = (TextView) findViewById(R.id.trBalance);
+        TextView vBalan = (TextView) findViewById(R.id.jBalance);
         vBalan.setText(getIntent().getExtras().getString("xbalan"));
+
+        zvAcct = vAcct.getText().toString().trim();
+        zvBalan = vBalan.getText().toString().trim();
+
 
         zvAcct = vAcct.getText().toString().trim();
         zvBalan = vBalan.getText().toString().trim();
@@ -60,16 +67,16 @@ public class Transactions extends Activity implements View.OnClickListener {
         String zBal = zcur.format(xBalan);
         vBalan.setText(zBal);
 
-        tr_tipos = (Spinner) findViewById(R.id.tipos);
+        jr_tipos = (Spinner) findViewById(R.id.jtipos);
 
         ArrayAdapter adap = ArrayAdapter.createFromResource(this, R.array.trans_tipos, android.R.layout.simple_spinner_dropdown_item);
-        tr_tipos.setAdapter(adap);
+        jr_tipos.setAdapter(adap);
 
-        TextView trDate = (TextView) findViewById(R.id.trDate);
+        TextView jrDate = (TextView) findViewById(R.id.jDate);
         //****** Sets the current date - Date Dialog **********
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");  //current date
-        trDate.setText(sdf.format(new Date()));
-        trDate.setOnClickListener(new View.OnClickListener() {
+        jrDate.setText(sdf.format(new Date()));
+        jrDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DateDialog dialog = new DateDialog(v);
@@ -79,16 +86,16 @@ public class Transactions extends Activity implements View.OnClickListener {
 
         });
 
-        trAmount = (EditText) findViewById(R.id.trAmount);
-        trNotes = (EditText) findViewById(R.id.trNotes);
+        jAmount = (EditText) findViewById(R.id.jAmount);
+        jNotes = (EditText) findViewById(R.id.jNotes);
 
         // *** Button on the screen
-        btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnView = (Button) findViewById(R.id.btnView);
+        btnUpdate = (Button) findViewById(R.id.btnUpdate);
+        btnDelete = (Button) findViewById(R.id.btnDelete);
 
         // *** Calling Listners  *****
-        btnAdd.setOnClickListener(this);
-        btnView.setOnClickListener(this);
+        btnUpdate.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
 
     }
 
@@ -96,18 +103,18 @@ public class Transactions extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if (v == btnAdd) {
-            tranInsert();
+        if (v == btnUpdate) {
+       //     tranInsert();
         }
 
-        if (v == btnView) {
-            TextView vAcct = (TextView) findViewById(R.id.zAcct);
-            TextView vfname = (TextView) findViewById(R.id.zOwner);
-            TextView vBalan = (TextView) findViewById(R.id.trBalance);
+        if (v == btnDelete) {
+            TextView vAcct = (TextView) findViewById(R.id.jAcct);
+            TextView vfname = (TextView) findViewById(R.id.jOwner);
+            TextView vBalan = (TextView) findViewById(R.id.jBalance);
             zvBalan = vBalan.getText().toString().trim();
             String jbal = zvBalan.substring(1);
 
-            Intent dlist = new Intent(Transactions.this, TransLista.class);
+            Intent dlist = new Intent(TransUpdel.this, TransLista.class);
             dlist.putExtra("xaccount", vAcct.getText().toString());
             dlist.putExtra("xfname", vfname.getText().toString());
             dlist.putExtra("xbalan", jbal);
@@ -118,7 +125,7 @@ public class Transactions extends Activity implements View.OnClickListener {
     } //***** End of Program *****
 
     //***** Transaction functions *******
-    public void tranInsert() {
+ /*   public void tranInsert() {
 
         // String ztrType = trType.getText().toString().trim();
         String ztrType = tr_tipos.getSelectedItem().toString();
@@ -144,12 +151,7 @@ public class Transactions extends Activity implements View.OnClickListener {
         TextView trDate = (TextView) findViewById(R.id.trDate);
 
         String ztrAmount = trAmount.getText().toString().trim();
-      //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
-
-        if (trAmount.getText().toString().trim().length() == 0) {
-            Toast.makeText(this, "Please enter an Transaction Amount !", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
 
         BigDecimal b1 = new BigDecimal(zvBalan);
         BigDecimal b2 = new BigDecimal(ztrAmount);
@@ -163,12 +165,12 @@ public class Transactions extends Activity implements View.OnClickListener {
         String ztrType = tr_tipos.getSelectedItem().toString();
 
         String ztrNotes = trNotes.getText().toString().trim();
-        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);  //*** Adding Transactions
+        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);  /*//*** Adding Transactions
 
         Toast.makeText(this, "Transaction created !", Toast.LENGTH_SHORT).show();
         trDate.setText("");
 
-        //*** Display updated Balance Amount *****
+        /*//*** Display updated Balance Amount *****
 
         TextView vBalan = (TextView) findViewById(R.id.trBalance);
 
@@ -177,16 +179,16 @@ public class Transactions extends Activity implements View.OnClickListener {
         String zBal = zcur.format(xBalan);
         vBalan.setText(zBal);
 
-        ///********** ACCOUNT TABLE UPDATE ******
+        //*//********** ACCOUNT TABLE UPDATE ******
 
         Cursor z = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
         if (z.moveToFirst()) {
-            zb.execSQL("UPDATE account SET runBalance='" + runBalance + "' WHERE acctNumber='" + vAcct.getText() + "'");
-         //   Toast.makeText(this, "Run Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
+            zb.execSQL("UPDATE account SET runkBalance='" + runBalance + "' WHERE acctNumber='" + vAcct.getText() + "'");
+            //   Toast.makeText(this, "Run Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
         }
 
-        //********* TO Transactions List *******
-        Intent dlist = new Intent(Transactions.this, TransLista.class);
+        /*//********* TO Transactions List *******
+        Intent dlist = new Intent(TransUpdel.this, Transactions.class);
         dlist.putExtra("xaccount", vAcct.getText().toString());
         dlist.putExtra("xfname", vfname.getText().toString());
         dlist.putExtra("xbalan", runBalance);
@@ -202,15 +204,10 @@ public class Transactions extends Activity implements View.OnClickListener {
         String ztrAmount = trAmount.getText().toString().trim();
         //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
 
-        if (trAmount.getText().toString().trim().length() == 0) {
-            Toast.makeText(this, "Please enter an Transaction Amount !", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         BigDecimal b1 = new BigDecimal(zvBalan);
         BigDecimal b2 = new BigDecimal(ztrAmount);
         b1 = b1.subtract(b2);
-        BigDecimal b3 = b1.setScale(2, BigDecimal.ROUND_UP); //** two decimalplaces
+        BigDecimal b3 = b1.setScale(2, BigDecimal.ROUND_UP); /*//** two decimalplaces
 
         //Double jBalance = xBalan + xAmount;
         String runBalance = String.valueOf(b3); //convert to String
@@ -220,12 +217,12 @@ public class Transactions extends Activity implements View.OnClickListener {
         String ztrType = tr_tipos.getSelectedItem().toString();
 
         String ztrNotes = trNotes.getText().toString().trim();
-        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);  //*** Adding Transactions
+        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);  /*//*** Adding Transactions
 
         Toast.makeText(this, "Transaction created !", Toast.LENGTH_SHORT).show();
         trDate.setText("");
 
-        //*** Display updated Balance Amount *****
+        /*//*** Display updated Balance Amount *****
 
         TextView vBalan = (TextView) findViewById(R.id.trBalance);
 
@@ -234,16 +231,16 @@ public class Transactions extends Activity implements View.OnClickListener {
         String zBal = zcur.format(xBalan);
         vBalan.setText(zBal);
 
-        ///********** ACCOUNT TABLE UPDATE ******
+        //*//********** ACCOUNT TABLE UPDATE ******
 
         Cursor z = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
         if (z.moveToFirst()) {
             zb.execSQL("UPDATE account SET runBalance='" + runBalance + "' WHERE acctNumber='" + vAcct.getText() + "'");
-       //     Toast.makeText(this, "Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
+            //     Toast.makeText(this, "Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
         }
 
-        //********* TO Transactions List *******
-        Intent dlist = new Intent(Transactions.this, TransLista.class);
+        /*//********* TO Transactions List *******
+        Intent dlist = new Intent(TransUpdel.this, Transactions.class);
         dlist.putExtra("xaccount", vAcct.getText().toString());
         dlist.putExtra("xfname", vfname.getText().toString());
         dlist.putExtra("xbalan", runBalance);
@@ -259,14 +256,14 @@ public class Transactions extends Activity implements View.OnClickListener {
         jjBalan = jjBalan.substring(1);
 
 
-        Intent iput = new Intent(Transactions.this, MainActivity.class);
+        Intent iput = new Intent(TransUpdel.this, MainActivity.class);
         iput.putExtra("xaccount", vAcct.getText().toString());
         iput.putExtra("xfname", vfname.getText().toString());
         iput.putExtra("xbalan", jjBalan);
 
         startActivity(iput);
 
-       // finish();
+        // finish();
     }
 
     public void clearTransScrn() {
@@ -275,4 +272,5 @@ public class Transactions extends Activity implements View.OnClickListener {
         trNotes.setText("");
         trAmount.requestFocus();
     }
+*/
 }

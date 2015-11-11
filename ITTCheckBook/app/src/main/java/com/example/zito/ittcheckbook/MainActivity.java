@@ -24,7 +24,7 @@ import java.util.Date;
  */
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    EditText acctNumber, firstName, lastName, bankName, bankBalance, acctNotes;
+    EditText acctNumber, firstName, lastName, bankName, bankBalance, runBalance, acctNotes;
     Button btnAdd, btnView, btnUpdate, btnList, btnDelete;
 
     Zacct_Helper db;
@@ -41,6 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         lastName = (EditText) findViewById(R.id.lastName);
         bankName = (EditText) findViewById(R.id.bankName);
         bankBalance = (EditText) findViewById(R.id.bankBalance);
+        runBalance = (EditText) findViewById(R.id.runBalance);
 
         TextView acctDate = (TextView) findViewById(R.id.acctDate);
         //****** Sets the current date - Date Dialog **********
@@ -101,7 +102,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 bankName.setText(z.getString(3));
                 bankBalance.setText(z.getString(4));
                 acctDate.setText(z.getString(5));
-                acctNotes.setText(z.getString(6));
+                runBalance.setText(z.getString(6));
+                acctNotes.setText(z.getString(7));
 
             } else {
 
@@ -123,7 +125,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 zb.execSQL("UPDATE account SET firstName='" + firstName.getText()
                         + "',lastName='" + lastName.getText() + "',bankName='" + bankName.getText()
                         + "',bankBalance='" + bankBalance.getText() + "',acctDate='" + acctDate.getText()
-                        + "',acctNotes='" + acctNotes.getText()
+                        + "',runBalance='" + runBalance.getText() + "',acctNotes='" + acctNotes.getText()
                         + "' WHERE acctNumber='" + acctNumber.getText() + "'");
 
                 Toast.makeText(this, "Account Was UPDATED !!", Toast.LENGTH_SHORT).show();
@@ -155,10 +157,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (v == btnList) {
             Cursor z = zb.rawQuery("SELECT * FROM account", null);
             if (z.getCount() == 0) {
-                //  showMessage("Error - View All  Records", "No records were found...");
                 Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
                 zMessage("Error ! - No Records", "Database has NO Records", zicon);
-               // Toast.makeText(this, "NO Records Found !!", Toast.LENGTH_SHORT).show();
                 return;
             }
             StringBuilder buffer = new StringBuilder();
@@ -168,7 +168,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 buffer.append("Acct.Number: ").append(z.getString(0)).append("\n");
                 buffer.append("Name: ").append(z.getString(1)).append(" ").append(z.getString(2)).append("\n");
                 buffer.append("Bank Name: ").append(z.getString(3)).append("\n");
-                buffer.append("Bank Balance: ").append(z.getString(4)).append("\n\n");
+                buffer.append("Starting Balance: ").append(z.getString(4)).append("\n");
+                buffer.append("Date: ").append(z.getString(5)).append("\n");
+                buffer.append("Running  Balance: ").append(z.getString(6)).append("\n");
+                buffer.append("Notes: ").append(z.getString(7)).append("\n\n");
             }
 
             zList("Accounts Detail", buffer.toString());
@@ -180,11 +183,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //******To Transactions OnClick Button *****
     public void btnTransactions(View v) {
 
-        TextView acctDate = (TextView) findViewById(R.id.acctDate);
+        //TextView acctDate = (TextView) findViewById(R.id.acctDate);
+
         if (acctNumber.getText().toString().trim().length() == 0) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
             zMessage("Error ! - No Record Found", "Please enter an Account Number", zicon);
-         //   Toast.makeText(this, "Please enter an Account Number !", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -192,7 +195,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         intent.putExtra("xaccount", acctNumber.getText().toString());
         intent.putExtra("xfname", firstName.getText().toString());
-        intent.putExtra("xbalan", bankBalance.getText().toString());
+        intent.putExtra("xbalan", runBalance.getText().toString());
 
         startActivity(intent);
     }
@@ -206,8 +209,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String bkname = bankName.getText().toString().trim();
         String bkbalance = bankBalance.getText().toString().trim();
         String actdate = acctDate.getText().toString().trim();
+        String rnbalance = runBalance.getText().toString().trim();
         String actnotes = acctNotes.getText().toString().trim();
-        db.addAccount(actnumber, fname, lname, bkname, bkbalance, actdate, actnotes);
+        db.addAccount(actnumber, fname, lname, bkname, bkbalance, actdate, rnbalance, actnotes);
         Toast.makeText(this, "The Account was created !", Toast.LENGTH_SHORT).show();
         acctDate.setText("");
     }
@@ -219,8 +223,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         lastName.setText("");
         bankName.setText("");
         bankBalance.setText("");
-        //acctDate.setText("");
         acctNotes.setText("");
+        runBalance.setText("");
         acctNumber.requestFocus();
     }
 
