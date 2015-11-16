@@ -2,7 +2,11 @@
     <string name="app_name">ITTCheckBook</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Transactions</string>
+    <string name="viewrec">Display Acct Data</string>
+    <string name="action_list">List of Accounts</string>
+    <string name="zblank">Reset Fields</string>
+    <string name="barabout">App Info.</string>
 
     <string name="xtit">ACCOUNT Info.</string>
     <string name="acctnum">Acct. Number:</string>
@@ -22,17 +26,17 @@
     <string name="tid">Trans. ID:</string>
     <string name="tdate">Trans. Date:</string>
     <string name="ttype">Trans. Type:</string>
-    <string name="tamount">Amount:</string>
+    <string name="tamount">Trans. Amount:</string>
     <string name="tnotes">Notes:</string>
 
     <string name="jtrans">UPDATE TRANSACTIONS</string>
     <string name="jxacct">Account #:</string>
     <string name="jxowner">Account Owner:</string>
     <string name="jxbalance">Current Balance:</string>
-    <string name="jxid">Trans. ID:</string>
+    <string name="jxid">Transaction ID:</string>
     <string name="jxdate">Trans. Date:</string>
     <string name="jxtype">Trans. Type:</string>
-    <string name="jxamount">Amount:</string>
+    <string name="jxamount">Trans. Amount:</string>
     <string name="jxnotes">Notes:</string>
 
     <string-array name="trans_tipos">

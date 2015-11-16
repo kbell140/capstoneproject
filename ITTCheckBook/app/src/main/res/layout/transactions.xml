@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f5e5d9"
+    android:background="#f5eddb"
     android:orientation="vertical">
 
     <LinearLayout
@@ -104,11 +104,11 @@
                 android:id="@+id/trBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dip"
+                android:layout_marginLeft="20dip"
                 android:layout_marginRight="25dip"
                 android:background="#cff5e7"
                 android:textColor="#0000ff"
-                android:textSize="23sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
         </TableRow>
@@ -161,8 +161,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/box_text"
                 android:textColor="#0000ff"
-                android:textStyle="bold"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
         </TableRow>
 
@@ -189,8 +188,7 @@
                 android:background="@drawable/box_text"
                 android:inputType="numberDecimal"
                 android:textColor="#0000ff"
-                android:textStyle="bold"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
             <requestFocus/>
 
         </TableRow>

@@ -12,14 +12,17 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by Julio C. on 11/7/2015.
  */
 public class TransLista extends AppCompatActivity {
     Button btnAdd;
     ListView listAccts;
-    TextView jtid, jtacct, jttype, jtamount, jtdate;
+    TextView jtid, jtacct, jttype, jtamount, jtdate, jtnotes;
     String zvAcct, zvBalan;
+    String zzam = "";
 
     Zacct_Helper db;
     SQLiteDatabase zb;
@@ -36,7 +39,18 @@ public class TransLista extends AppCompatActivity {
         Intent intent = getIntent();
         final String vAcct = intent.getStringExtra("xaccount");
         final String vfname = intent.getStringExtra("xfname");
-        final String vBalan = intent.getStringExtra("xbalan");
+        //final String vBalan = intent.getStringExtra("xbalan");
+
+        TextView vBalan = (TextView) findViewById(R.id.dbala);
+        vBalan.setText(getIntent().getExtras().getString("xbalan"));
+        zvBalan = vBalan.getText().toString().trim();
+        zvBalan = zvBalan.replace(",", "");
+
+        Double xBalan = Double.parseDouble(zvBalan);
+        DecimalFormat zcur = new DecimalFormat("$###,###.##");
+        String zBal = zcur.format(xBalan);
+        vBalan.setText(zBal);
+
 
         btnAdd = (Button) findViewById(R.id.btnAdd);
         listAccts = (ListView) findViewById(R.id.listAccts);
@@ -47,7 +61,7 @@ public class TransLista extends AppCompatActivity {
                 Intent iput = new Intent(TransLista.this, Transactions.class);
                 iput.putExtra("xaccount", vAcct);
                 iput.putExtra("xfname", vfname);
-                iput.putExtra("xbalan", vBalan);
+                iput.putExtra("xbalan", zvBalan);
                 startActivity(iput);
             }
         });
@@ -72,27 +86,42 @@ public class TransLista extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-             //   TextView jtacct = (TextView) findViewById(R.id.z_tacct);
-              //  jtacct.setText(getIntent().getExtras().getString("xaccount"));
-              //  TextView vfname = (TextView) findViewById(R.id.zOwner);
-             //   vfname.setText(getIntent().getExtras().getString("xfname"));
-              //  TextView vBalan = (TextView) findViewById(R.id.trBalance);
-              //  vBalan.setText(getIntent().getExtras().getString("xbalan"));
-/*
+                jtid = (TextView) view.findViewById(R.id.z_id);
+                jtacct = (TextView) view.findViewById(R.id.z_tacct);
+                jttype = (TextView) view.findViewById(R.id.z_ttype);
+                jtamount = (TextView) view.findViewById(R.id.z_tamount);
+                jtdate = (TextView) view.findViewById(R.id.z_tdate);
+                jtnotes = (TextView) view.findViewById(R.id.z_tnotes);
 
-                zvAcct = jtacct.getText().toString().trim();
-                zvBalan = vBalan.getText().toString().trim();
+                String jc_id = jtid.getText().toString();
+                String jc_acct = jtacct.getText().toString();
+                String jc_type = jttype.getText().toString();
+                String jc_amount = jtamount.getText().toString();
+//
+//                //zvBalan = vBalan.getText().toString().trim();
+//                jc_amount = jc_amount.replace(",","");
+//
+//                Double xamount = Double.parseDouble(jc_amount);
+//                DecimalFormat zcur = new DecimalFormat("$###,###.##");
+//                String zBal = zcur.format(xamount);
+//                jtamount.setText(zBal);
+//           //     jtamount = (TextView) view.findViewById(R.id.z_tamount);
 
-                Double xBalan = Double.parseDouble(zvBalan);
-                DecimalFormat zcur = new DecimalFormat("$###,###.##");
-                String zBal = zcur.format(xBalan);
-                vBalan.setText(zBal);
-*/
+                String jc_date = jtdate.getText().toString();
+                String jc_notes = jtnotes.getText().toString();
 
                 Intent iput = new Intent(TransLista.this, TransUpdel.class);
-                iput.putExtra("xaccount", vAcct);
+                iput.putExtra("xid", jc_id);
+                //iput.putExtra("xaccount", vAcct);
+                iput.putExtra("xaccount", jc_acct);
                 iput.putExtra("xfname", vfname);
-                iput.putExtra("xbalan", vBalan);
+               // iput.putExtra("xbalan", vBalan);
+                iput.putExtra("xbalan", zvBalan);
+                iput.putExtra("xtype", jc_type);
+                iput.putExtra("xamount", jc_amount);
+                iput.putExtra("xdate", jc_date);
+                iput.putExtra("xnotes", jc_notes);
+
                 startActivity(iput);
 
 

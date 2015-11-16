@@ -2,10 +2,14 @@ package com.example.zito.ittcheckbook;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,6 +58,7 @@ public class Transactions extends Activity implements View.OnClickListener {
 
         zvAcct = vAcct.getText().toString().trim();
         zvBalan = vBalan.getText().toString().trim();
+        zvBalan = zvBalan.replace(",","");
 
         Double xBalan = Double.parseDouble(zvBalan);
         DecimalFormat zcur = new DecimalFormat("$###,###.##");
@@ -89,9 +94,7 @@ public class Transactions extends Activity implements View.OnClickListener {
         // *** Calling Listners  *****
         btnAdd.setOnClickListener(this);
         btnView.setOnClickListener(this);
-
     }
-
 
     @Override
     public void onClick(View v) {
@@ -112,7 +115,7 @@ public class Transactions extends Activity implements View.OnClickListener {
             dlist.putExtra("xfname", vfname.getText().toString());
             dlist.putExtra("xbalan", jbal);
             startActivity(dlist);
-
+            finish();
         }
 
     } //***** End of Program *****
@@ -133,8 +136,9 @@ public class Transactions extends Activity implements View.OnClickListener {
 
                 break;
             default:
+                Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
+                zMessage("Error ! - Invalid Transaction Type", "Please, Select Debit/Credit", zicon);
 
-                Toast.makeText(this, "Invalid Transaction Type !", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -147,7 +151,8 @@ public class Transactions extends Activity implements View.OnClickListener {
       //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
 
         if (trAmount.getText().toString().trim().length() == 0) {
-            Toast.makeText(this, "Please enter an Transaction Amount !", Toast.LENGTH_SHORT).show();
+            Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
+            zMessage("Error ! - Transaction Amount", "Please, Enter a Valid Amount", zicon);
             return;
         }
 
@@ -162,14 +167,14 @@ public class Transactions extends Activity implements View.OnClickListener {
         String ztrDate = trDate.getText().toString().trim();
         String ztrType = tr_tipos.getSelectedItem().toString();
 
+        //****** ADD TRANSACTIONS  ************
         String ztrNotes = trNotes.getText().toString().trim();
-        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);  //*** Adding Transactions
+        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);
 
         Toast.makeText(this, "Transaction created !", Toast.LENGTH_SHORT).show();
         trDate.setText("");
 
         //*** Display updated Balance Amount *****
-
         TextView vBalan = (TextView) findViewById(R.id.trBalance);
 
         Double xBalan = Double.parseDouble(runBalance);
@@ -203,7 +208,8 @@ public class Transactions extends Activity implements View.OnClickListener {
         //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
 
         if (trAmount.getText().toString().trim().length() == 0) {
-            Toast.makeText(this, "Please enter an Transaction Amount !", Toast.LENGTH_SHORT).show();
+            Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
+            zMessage("Error ! - Transaction Amount", "Please, Enter a Valid Amount", zicon);
             return;
         }
 
@@ -219,8 +225,9 @@ public class Transactions extends Activity implements View.OnClickListener {
         String ztrDate = trDate.getText().toString().trim();
         String ztrType = tr_tipos.getSelectedItem().toString();
 
+        //******* ADD Transactions  *********
         String ztrNotes = trNotes.getText().toString().trim();
-        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);  //*** Adding Transactions
+        db.addtrans(ztrAcct, ztrType, ztrAmount, ztrDate, ztrNotes);
 
         Toast.makeText(this, "Transaction created !", Toast.LENGTH_SHORT).show();
         trDate.setText("");
@@ -256,7 +263,7 @@ public class Transactions extends Activity implements View.OnClickListener {
         TextView vfname = (TextView) findViewById(R.id.zOwner);
         TextView vBalan = (TextView) findViewById(R.id.trBalance);
         jjBalan = vBalan.getText().toString().trim();
-        jjBalan = jjBalan.substring(1);
+        jjBalan = jjBalan.substring(1); //Removes first character $ from string
 
 
         Intent iput = new Intent(Transactions.this, MainActivity.class);
@@ -265,9 +272,8 @@ public class Transactions extends Activity implements View.OnClickListener {
         iput.putExtra("xbalan", jjBalan);
 
         startActivity(iput);
-
        // finish();
-    }
+    } //*** End of Transactions Class
 
     public void clearTransScrn() {
         tr_tipos.setSelection(0);
@@ -275,4 +281,21 @@ public class Transactions extends Activity implements View.OnClickListener {
         trNotes.setText("");
         trAmount.requestFocus();
     }
+
+    //***** Message Function *******
+    public void zMessage(String title, String message, Drawable zicon)
+    {
+        AlertDialog alertDialog = new AlertDialog.Builder(Transactions.this).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(zicon);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
 }
