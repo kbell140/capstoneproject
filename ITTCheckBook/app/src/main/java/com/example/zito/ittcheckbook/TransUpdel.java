@@ -454,7 +454,8 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
             case R.id.zaccts:
                 zaccts();
                 break;
-            case R.id.zblank:
+            case R.id.totrans:
+                totrans();
                 zClear();
                 break;
             case R.id.barabout:
@@ -493,6 +494,22 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
         jjBalan = jjBalan.substring(1); //Removes first character $ from string
 
         Intent iput = new Intent(TransUpdel.this, MainActivity.class);
+        iput.putExtra("xaccount", vAcct.getText().toString());
+        iput.putExtra("xfname", vfname.getText().toString());
+        iput.putExtra("xbalan", jjBalan);
+
+        startActivity(iput);
+
+    }
+
+    private void totrans() {
+        TextView vAcct = (TextView) findViewById(R.id.jAcct);
+        TextView vfname = (TextView) findViewById(R.id.jOwner);
+        TextView vBalan = (TextView) findViewById(R.id.jBalance);
+        jjBalan = vBalan.getText().toString().trim();
+        jjBalan = jjBalan.substring(1); //Removes first character $ from string
+
+        Intent iput = new Intent(TransUpdel.this, Transactions.class);
         iput.putExtra("xaccount", vAcct.getText().toString());
         iput.putExtra("xfname", vfname.getText().toString());
         iput.putExtra("xbalan", jjBalan);

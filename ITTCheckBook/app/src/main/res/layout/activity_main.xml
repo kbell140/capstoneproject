@@ -266,6 +266,7 @@
             android:id="@+id/btnUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:clickable="true"
             android:text="UPDATE" />
 
@@ -273,6 +274,7 @@
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:clickable="true"
             android:text="DELETE" />
 

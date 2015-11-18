@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnAdd, btnUpdate, btnDelete;
     TextView runBalance;
 
+    String YesNo = "";
     Zacct_Helper db;
     SQLiteDatabase zb;
 
@@ -122,11 +123,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Cursor z = zb.rawQuery("select * from account where acctNumber ='" + acctNumber.getText() + "'", null);
             if (z.moveToFirst()) {
-                zb.execSQL("DELETE FROM account WHERE acctNumber='" + acctNumber.getText() + "'");
+                //****************
+                Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.delete, null);
+                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(MainActivity.this);
+                alertDialog2.setTitle("Alert - Delete");
+                alertDialog2.setCancelable(false);
+                alertDialog2.setMessage("Are you sure want to delete this record?");
+                alertDialog2.setIcon(zicon);
+                alertDialog2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        YesNo = "Yes";
+                        Cursor c = zb.rawQuery("SELECT * FROM account WHERE acctNumber='" + acctNumber.getText() + "'", null);
+                        c.moveToFirst();
+                        zb.execSQL("DELETE FROM account WHERE acctNumber='" + acctNumber.getText() + "'");
+                        Toast.makeText(getApplicationContext(), "The RECORD was Deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                alertDialog2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        YesNo = "No";
+                        Toast.makeText(getApplicationContext(), "NO RECORD was deleted", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog2.show();
+/*                zb.execSQL("DELETE FROM account WHERE acctNumber='" + acctNumber.getText() + "'");
 
                 Toast.makeText(this, "Account Was DELETED !!", Toast.LENGTH_SHORT).show();
                 clearText();
-            } else {
+ */           } else {
                 Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
                 zMessage("Error ! - Account Does Not Exist", "Please, Enter a Valid ACCT #", zicon);
                 clearText();

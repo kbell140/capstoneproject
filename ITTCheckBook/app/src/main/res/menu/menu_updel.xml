@@ -12,8 +12,8 @@
         android:orderInCategory="2"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/zblank"
-        android:title="@string/zblank"
+    <item android:id="@+id/totrans"
+        android:title="@string/totrans"
         android:orderInCategory="3"
         app:showAsAction="ifRoom" />
 
