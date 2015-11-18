@@ -1,11 +1,18 @@
 package com.example.zito.ittcheckbook;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +27,7 @@ import java.util.Date;
 /**
  * Created by Zito on 11/9/2015.
  */
-public class TransUpdel extends Activity implements View.OnClickListener {
+public class TransUpdel extends AppCompatActivity implements View.OnClickListener {
 
     EditText jAmount, jNotes;
     Button btnUpdate, btnDelete;
@@ -30,6 +37,7 @@ public class TransUpdel extends Activity implements View.OnClickListener {
 
     String zvAcct = "";
     String zvBalan = "";
+    String jjBalan = "";
     String zvamount = "";
     String zzid = "";
     String ztipo = "";
@@ -102,7 +110,7 @@ public class TransUpdel extends Activity implements View.OnClickListener {
         jAmount = (EditText) findViewById(R.id.jAmount);
         jNotes = (EditText) findViewById(R.id.jNotes);
 
-        // *** Buttons Update/Delete
+        // *** Buttons Update/Delete  ********
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
         btnDelete = (Button) findViewById(R.id.btnDelete);
 
@@ -154,6 +162,70 @@ public class TransUpdel extends Activity implements View.OnClickListener {
 
     //************ UPDATES / DELETES **********
     public void uCredit() {
+        TextView vAcct = (TextView) findViewById(R.id.jAcct);
+        TextView vfname = (TextView) findViewById(R.id.jOwner);
+        TextView vBalan = (TextView) findViewById(R.id.jBalance);
+        TextView vdate = (TextView) findViewById(R.id.jDate);
+        zvBalan = vBalan.getText().toString().trim();
+        String jbal = zvBalan.substring(1); //*** Removes $ sign
+
+        if (jAmount.getText().toString().trim().length() == 0) {
+            //    Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
+            //    zMessage("Error ! - Transaction Amount", "Please, Enter a Valid Amount", zicon);
+            Toast.makeText(this, "Transaction Amount is INVALID !!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String ztrDate = vdate.getText().toString().trim();
+        String ztrAmount = jAmount.getText().toString().trim();
+        String ztrNotes = jNotes.getText().toString().trim();
+
+
+        Cursor z = zb.rawQuery("SELECT * FROM transactions WHERE _id ='" + jz_id + "'", null);
+        if (z.moveToFirst()) {
+            zb.execSQL("UPDATE transactions SET tranAmount='" + ztrAmount
+                    + "',tranDate='" + ztrDate + "',tranNotes='" + ztrNotes
+                    + "' WHERE _id='" + jz_id + "'");
+
+            Toast.makeText(this, "Transaction Was UPDATED !!", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(this, "Invalid Transaction !!", Toast.LENGTH_SHORT).show();
+
+
+        //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
+        BigDecimal b1 = new BigDecimal(jbal.replaceAll(",",""));
+        BigDecimal b2 = new BigDecimal(ztrAmount);
+        BigDecimal b3 = new BigDecimal(zvamount);
+        zbig = b2.compareTo(b3);
+        if (zbig == 0) {
+            BigDecimal b5 = b1.setScale(2, BigDecimal.ROUND_UP);  //*** b2 and b3 are equal
+        }
+        if (zbig == 1) {
+            BigDecimal b4 = b2.subtract(b3); //*** b2 greater than b3
+            b1 = b1.subtract(b4);
+        }
+
+        if (zbig == -1) {
+            BigDecimal b4 = b3.subtract(b2);  //*** b3 greater than b2
+            b1 = b1.add(b4);
+        }
+
+        BigDecimal b5 = b1.setScale(2, BigDecimal.ROUND_UP);
+
+        String runBalance = String.valueOf(b5); //convert to String
+
+        Cursor zup = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
+        if (zup.moveToFirst()) {
+            zb.execSQL("UPDATE account SET runBalance='" + runBalance + "' WHERE acctNumber='" + vAcct.getText() + "'");
+            //   Toast.makeText(this, "Run Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
+        }
+
+        //***** To Transactions List ********
+        Intent dlist = new Intent(TransUpdel.this, TransLista.class);
+        dlist.putExtra("xaccount", vAcct.getText().toString());
+        dlist.putExtra("xfname", vfname.getText().toString());
+        dlist.putExtra("xbalan", runBalance);
+        startActivity(dlist);
+        finish();
 
     }
 
@@ -202,7 +274,7 @@ public class TransUpdel extends Activity implements View.OnClickListener {
 
         if (zbig == -1) {
             BigDecimal b4 = b3.subtract(b2);  //*** b3 greater than b2
-            b1 = b1.add(b4);
+            b1 = b1.subtract(b4);
         }
 
         BigDecimal b5 = b1.setScale(2, BigDecimal.ROUND_UP);
@@ -339,10 +411,94 @@ public class TransUpdel extends Activity implements View.OnClickListener {
 
     } //*** End DEBIT from Delete button ******
 
+    public void zMessage(String title, String message, Drawable zicon)
+    {
+        AlertDialog alertDialog = new AlertDialog.Builder(TransUpdel.this).create();
+        alertDialog.setTitle(title);
+        alertDialog.setCancelable(false);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(zicon);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+
     public void zClear() {
         jAmount.setText("");
         jNotes.setText("");
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_updel, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.zapp:
+                zabout();
+                break;
+            case R.id.dlistra:
+                dlistra();
+                break;
+            case R.id.zaccts:
+                zaccts();
+                break;
+            case R.id.zblank:
+                zClear();
+                break;
+            case R.id.barabout:
+                zabout();
+                break;
+        }
+        return true;
+    }
+
+    private void zabout() {
+        Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.zxitt, null);
+        zMessage("Captstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);
+        return;
+    }
+
+    private void dlistra() {
+        TextView vAcct = (TextView) findViewById(R.id.zAcct);
+        TextView vfname = (TextView) findViewById(R.id.zOwner);
+        TextView vBalan = (TextView) findViewById(R.id.trBalance);
+        zvBalan = vBalan.getText().toString().trim();
+        String jbal = zvBalan.substring(1);
+
+        Intent dlist = new Intent(TransUpdel.this, TransLista.class);
+        dlist.putExtra("xaccount", vAcct.getText().toString());
+        dlist.putExtra("xfname", vfname.getText().toString());
+        dlist.putExtra("xbalan", jbal);
+        startActivity(dlist);
+        finish();
+    }
+
+    private void zaccts() {
+        TextView vAcct = (TextView) findViewById(R.id.jAcct);
+        TextView vfname = (TextView) findViewById(R.id.jOwner);
+        TextView vBalan = (TextView) findViewById(R.id.jBalance);
+        jjBalan = vBalan.getText().toString().trim();
+        jjBalan = jjBalan.substring(1); //Removes first character $ from string
+
+        Intent iput = new Intent(TransUpdel.this, MainActivity.class);
+        iput.putExtra("xaccount", vAcct.getText().toString());
+        iput.putExtra("xfname", vfname.getText().toString());
+        iput.putExtra("xbalan", jjBalan);
+
+        startActivity(iput);
+
+    }
 
 } //**** End Transaction Update/delete Class

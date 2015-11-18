@@ -172,9 +172,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 */
     //***** ADD Records *****
     private void insert() {
-        if (acctNumber.getText().toString().trim().length() == 0) {
+        if (acctNumber.getText().toString().trim().length() == 0 ||
+                firstName.getText().toString().trim().length() == 0 ||
+                lastName.getText().toString().trim().length() == 0 ||
+                bankName.getText().toString().trim().length() == 0 ) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - Invalid Info.", "Please enter values for all fields", zicon);
+            zMessage("Error! - To Add Accounts", "Please enter values for all fields", zicon);
             return;
         }
 
@@ -271,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void zabout() {
         Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.zxitt, null);
-        zMessage("Captstone * Sep - Dec 2015", "** Created by: Julio Casachagua **", zicon);
+        zMessage("Captstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);
         return;
     }
 
@@ -279,8 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView acctDate = (TextView) findViewById(R.id.acctDate);
         if (acctNumber.getText().toString().trim().length() == 0) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - No Record Found", "Please enter a valid Account #", zicon);
-            //       Toast.makeText(this, "Please enter an Account Number !", Toast.LENGTH_SHORT).show();
+            zMessage("Error ! - No Record Found", "Please enter a valid Account Number", zicon);
             return;
         }
 
@@ -296,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } else {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - No Record Found", "Please enter a valid Account #", zicon);
+            zMessage("Error ! - No Record Found", "Please enter a valid Account Number", zicon);
             //  Toast.makeText(this, "Account Not Found !", Toast.LENGTH_SHORT).show();
             clearText();
         }
@@ -310,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lastName.getText().toString().trim().length() == 0 ||
                 bankName.getText().toString().trim().length() == 0 ) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.warning, null);
-            zMessage("Alert ! - Missing Values", "Please enter All Values", zicon);
+            zMessage("Alert ! - Missing Values", "Please get all fields values", zicon);
             return;
         }
         //***** Check database before transactions *****
@@ -325,17 +327,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             startActivity(intent);
 
-            //    zb.execSQL("DELETE FROM account WHERE acctNumber='" + acctNumber.getText() + "'");
-
-            //   Toast.makeText(this, "Account Was DELETED !!", Toast.LENGTH_SHORT).show();
-            //   clearText();
         } else {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - Enter a valid ACCT #.", ">>> Then Click VIEW Button", zicon);
-
-            //           Toast.makeText(this, "Invalid Account Number !!", Toast.LENGTH_SHORT).show();
+            zMessage("Error ! - Invalid Data", "Please get all fields values", zicon);
             clearText();
-            //           return;
         }
     }
 

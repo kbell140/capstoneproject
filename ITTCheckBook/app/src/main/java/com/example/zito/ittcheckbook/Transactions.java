@@ -1,6 +1,5 @@
 package com.example.zito.ittcheckbook;
 
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +9,10 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,10 +29,10 @@ import java.util.Date;
 /**
  * Created by Julio C. on 10/27/2015
  */
-public class Transactions extends Activity implements View.OnClickListener {
+public class Transactions extends AppCompatActivity implements View.OnClickListener {
 
     EditText trAmount, trNotes;
-    Button btnAdd, btnView;
+    Button btnAdd;
     Spinner tr_tipos;
 
     String zvAcct = "";
@@ -89,11 +92,9 @@ public class Transactions extends Activity implements View.OnClickListener {
 
         // *** Button on the screen
         btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnView = (Button) findViewById(R.id.btnView);
 
-        // *** Calling Listners  *****
+        // *** Calling Button to add transactions  *****
         btnAdd.setOnClickListener(this);
-        btnView.setOnClickListener(this);
     }
 
     @Override
@@ -103,6 +104,7 @@ public class Transactions extends Activity implements View.OnClickListener {
             tranInsert();
         }
 
+/*
         if (v == btnView) {
             TextView vAcct = (TextView) findViewById(R.id.zAcct);
             TextView vfname = (TextView) findViewById(R.id.zOwner);
@@ -117,8 +119,9 @@ public class Transactions extends Activity implements View.OnClickListener {
             startActivity(dlist);
             finish();
         }
+*/
 
-    } //***** End of Program *****
+    } //***** End of onCreate *****
 
     //***** Transaction functions *******
     public void tranInsert() {
@@ -258,13 +261,12 @@ public class Transactions extends Activity implements View.OnClickListener {
 
     }
 
-    public void btnExit(View v) {
+ /*   public void btnExit(View v) {
         TextView vAcct = (TextView) findViewById(R.id.zAcct);
         TextView vfname = (TextView) findViewById(R.id.zOwner);
         TextView vBalan = (TextView) findViewById(R.id.trBalance);
         jjBalan = vBalan.getText().toString().trim();
         jjBalan = jjBalan.substring(1); //Removes first character $ from string
-
 
         Intent iput = new Intent(Transactions.this, MainActivity.class);
         iput.putExtra("xaccount", vAcct.getText().toString());
@@ -273,8 +275,8 @@ public class Transactions extends Activity implements View.OnClickListener {
 
         startActivity(iput);
        // finish();
-    } //*** End of Transactions Class
-
+    } /*//*** End of Transactions Class
+*/
     public void clearTransScrn() {
         tr_tipos.setSelection(0);
         trAmount.setText("");
@@ -287,6 +289,7 @@ public class Transactions extends Activity implements View.OnClickListener {
     {
         AlertDialog alertDialog = new AlertDialog.Builder(Transactions.this).create();
         alertDialog.setTitle(title);
+        alertDialog.setCancelable(false);
         alertDialog.setMessage(message);
         alertDialog.setIcon(zicon);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -298,4 +301,73 @@ public class Transactions extends Activity implements View.OnClickListener {
         alertDialog.show();
     }
 
-}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_tran, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.zapp:
+                zabout();
+                break;
+            case R.id.zlistra:
+                zlistra();
+                break;
+            case R.id.zaccts:
+                zaccts();
+                break;
+            case R.id.zblank:
+                clearTransScrn();
+                break;
+            case R.id.barabout:
+                zabout();
+                break;
+        }
+        return true;
+
+    }
+    private void zabout() {
+        Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.zxitt, null);
+        zMessage("Captstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);
+        return;
+    }
+
+    private void zlistra() {
+        TextView vAcct = (TextView) findViewById(R.id.zAcct);
+        TextView vfname = (TextView) findViewById(R.id.zOwner);
+        TextView vBalan = (TextView) findViewById(R.id.trBalance);
+        zvBalan = vBalan.getText().toString().trim();
+        String jbal = zvBalan.substring(1);
+
+        Intent dlist = new Intent(Transactions.this, TransLista.class);
+        dlist.putExtra("xaccount", vAcct.getText().toString());
+        dlist.putExtra("xfname", vfname.getText().toString());
+        dlist.putExtra("xbalan", jbal);
+        startActivity(dlist);
+        finish();
+
+    }
+
+    private void zaccts() {
+        TextView vAcct = (TextView) findViewById(R.id.zAcct);
+        TextView vfname = (TextView) findViewById(R.id.zOwner);
+        TextView vBalan = (TextView) findViewById(R.id.trBalance);
+        jjBalan = vBalan.getText().toString().trim();
+        jjBalan = jjBalan.substring(1); //Removes first character $ from string
+
+        Intent iput = new Intent(Transactions.this, MainActivity.class);
+        iput.putExtra("xaccount", vAcct.getText().toString());
+        iput.putExtra("xfname", vfname.getText().toString());
+        iput.putExtra("xbalan", jjBalan);
+
+        startActivity(iput);
+
+    }
+
+} //*** End of Program

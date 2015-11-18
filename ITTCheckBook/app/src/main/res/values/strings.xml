@@ -7,6 +7,9 @@
     <string name="action_list">List of Accounts</string>
     <string name="zblank">Reset Fields</string>
     <string name="barabout">App Info.</string>
+    <string name="zaccts">Accounts Screen</string>
+    <string name="zlistra">Trans. List</string>
+    <string name="dlistra">Trans. List</string>
 
     <string name="xtit">ACCOUNT Info.</string>
     <string name="acctnum">Acct. Number:</string>
