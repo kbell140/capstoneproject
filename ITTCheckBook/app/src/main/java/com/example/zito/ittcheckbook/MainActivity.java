@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnAdd, btnUpdate, btnDelete;
     TextView runBalance;
 
-    String YesNo = "";
     Zacct_Helper db;
     SQLiteDatabase zb;
 
@@ -68,17 +67,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //btnView = (Button) findViewById(R.id.btnView);
         btnUpdate = (Button) findViewById(R.id.btnUpdate);
         btnDelete = (Button) findViewById(R.id.btnDelete);
-       // btnList = (Button) findViewById(R.id.btnList);
+        // btnList = (Button) findViewById(R.id.btnList);
 
         db = new Zacct_Helper(this);
         zb = db.getWritableDatabase();
 
         // *** Calling Listners  *****
         btnAdd.setOnClickListener(this);
-       // btnView.setOnClickListener(this);
+        // btnView.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-      //  btnList.setOnClickListener(this);
+        //  btnList.setOnClickListener(this);
     }
 
     @Override
@@ -121,86 +120,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
 
-            Cursor z = zb.rawQuery("select * from account where acctNumber ='" + acctNumber.getText() + "'", null);
+            final String jjact = acctNumber.getText().toString().trim();
+
+            Cursor z = zb.rawQuery("select * from account where acctNumber ='" + jjact + "'", null);
             if (z.moveToFirst()) {
                 //****************
-                Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.delete, null);
-                AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(MainActivity.this);
-                alertDialog2.setTitle("Alert - Delete");
-                alertDialog2.setCancelable(false);
-                alertDialog2.setMessage("Are you sure want to delete this record?");
-                alertDialog2.setIcon(zicon);
-                alertDialog2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        YesNo = "Yes";
-                        Cursor c = zb.rawQuery("SELECT * FROM account WHERE acctNumber='" + acctNumber.getText() + "'", null);
-                        c.moveToFirst();
-                        zb.execSQL("DELETE FROM account WHERE acctNumber='" + acctNumber.getText() + "'");
-                        Toast.makeText(getApplicationContext(), "The RECORD was Deleted", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                alertDialog2.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        YesNo = "No";
-                        Toast.makeText(getApplicationContext(), "NO RECORD was deleted", Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                    }
-                });
-                alertDialog2.show();
-/*                zb.execSQL("DELETE FROM account WHERE acctNumber='" + acctNumber.getText() + "'");
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //*** The Yes button was clicked
 
-                Toast.makeText(this, "Account Was DELETED !!", Toast.LENGTH_SHORT).show();
+                                zb.execSQL("DELETE FROM account WHERE acctNumber='" + jjact + "'");
+                                Toast.makeText(getApplicationContext(), "The ACCOUNT was Deleted", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //*** The No button was clicked
+                                Toast.makeText(getApplicationContext(), "NO Account Deleted", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                };
+
+                Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.delete, null);
+                AlertDialog.Builder alertD = new AlertDialog.Builder(MainActivity.this);
+                alertD.setTitle("DELETE - Alert!");
+                alertD.setIcon(zicon);
+                alertD.setCancelable(false);
+                alertD.setMessage("Deleting this Account" + "\n" + "Are you sure?")
+                        .setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+                //*********************
                 clearText();
- */           } else {
+            } else {
                 Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-                zMessage("Error ! - Account Does Not Exist", "Please, Enter a Valid ACCT #", zicon);
+                zMessage("Error ! - Account Not Found", "Please, Enter a Valid ACCT #", zicon);
                 clearText();
             }
         }
 
     }  //** End of OnClick View
 
-    //******To Transactions OnClick Button *****
- /*   public void btnTransactions(View v) {
-
-        if (acctNumber.getText().toString().trim().length() == 0) {
-            Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - No Record Found", "Please enter an Account Number", zicon);
-            return;
-        }
-        /*//***** Check database before transactions *****
-        Cursor z = zb.rawQuery("SELECT * FROM account WHERE acctNumber ='" + acctNumber.getText() + "'", null);
-        if (z.moveToFirst()) {
-
-            Intent intent = new Intent(MainActivity.this, Transactions.class);
-
-            intent.putExtra("xaccount", acctNumber.getText().toString());
-            intent.putExtra("xfname", firstName.getText().toString());
-            intent.putExtra("xbalan", runBalance.getText().toString());
-
-            startActivity(intent);
-
-        //    zb.execSQL("DELETE FROM account WHERE acctNumber='" + acctNumber.getText() + "'");
-
-         //   Toast.makeText(this, "Account Was DELETED !!", Toast.LENGTH_SHORT).show();
-         //   clearText();
-        } else {
-            Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - Enter a valid ACCT #.", ">>> Then Click VIEW Button", zicon);
-
- //           Toast.makeText(this, "Invalid Account Number !!", Toast.LENGTH_SHORT).show();
-            clearText();
- //           return;
-        }
-
-    }
-*/
     //***** ADD Records *****
     private void insert() {
         if (acctNumber.getText().toString().trim().length() == 0 ||
                 firstName.getText().toString().trim().length() == 0 ||
                 lastName.getText().toString().trim().length() == 0 ||
-                bankName.getText().toString().trim().length() == 0 ) {
+                bankName.getText().toString().trim().length() == 0) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
             zMessage("Error! - To Add Accounts", "Please enter values for all fields", zicon);
             return;
@@ -216,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String rr = bkbalance;
         String rnbalance = rr;
         String actdate = acctDate.getText().toString().trim();
-       // String rnbalance = runBalance.getText().toString().trim();
+        // String rnbalance = runBalance.getText().toString().trim();
         String actnotes = acctNotes.getText().toString().trim();
         db.addAccount(actnumber, fname, lname, bkname, bkbalance, actdate, rnbalance, actnotes);
         Toast.makeText(this, "The Account was created !", Toast.LENGTH_SHORT).show();
@@ -231,7 +199,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bankName.setText("");
         bankBalance.setText("");
         acctNotes.setText("");
-        runBalance.setText("");
+        //   runBalance.setText("");
+        TextView acctDate = (TextView) findViewById(R.id.acctDate);
+        //****** Sets the current date - Date Dialog **********
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");  //current date
+        acctDate.setText(sdf.format(new Date()));
+        acctDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateDialog dialog = new DateDialog(v);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, "Date Picker");
+            }
+
+        });
+
+
         acctNumber.requestFocus();
     }
 
@@ -246,8 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //***** My Defined Function - Display Alert message box  *******
-    public void zMessage(String title, String message, Drawable zicon)
-    {
+    public void zMessage(String title, String message, Drawable zicon) {
         AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle(title);
         alertDialog.setCancelable(false);
@@ -299,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void zabout() {
         Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.zxitt, null);
-        zMessage("Captstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);
+        zMessage("Capstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);
         return;
     }
 
@@ -335,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (acctNumber.getText().toString().trim().length() == 0 ||
                 firstName.getText().toString().trim().length() == 0 ||
                 lastName.getText().toString().trim().length() == 0 ||
-                bankName.getText().toString().trim().length() == 0 ) {
+                bankName.getText().toString().trim().length() == 0) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.warning, null);
             zMessage("Alert ! - Missing Values", "Please get all fields values", zicon);
             return;

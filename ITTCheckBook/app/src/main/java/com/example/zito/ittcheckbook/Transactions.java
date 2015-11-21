@@ -38,7 +38,7 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
     String zvAcct = "";
     String zvBalan = "";
     String jjBalan = "";
-
+    int xbig;
     Zacct_Helper db;
     SQLiteDatabase zb;
 
@@ -61,7 +61,7 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
 
         zvAcct = vAcct.getText().toString().trim();
         zvBalan = vBalan.getText().toString().trim();
-        zvBalan = zvBalan.replace(",","");
+        zvBalan = zvBalan.replace(",", "");  // Replace commas for ""
 
         Double xBalan = Double.parseDouble(zvBalan);
         DecimalFormat zcur = new DecimalFormat("$###,###.##");
@@ -206,7 +206,7 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
         TextView vAcct = (TextView) findViewById(R.id.zAcct);
         TextView vfname = (TextView) findViewById(R.id.zOwner);
         TextView trDate = (TextView) findViewById(R.id.trDate);
-
+        String jbal = zvBalan.substring(1); //*** Removes $ sign
         String ztrAmount = trAmount.getText().toString().trim();
         //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
 
@@ -215,14 +215,27 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
             zMessage("Error ! - Transaction Amount", "Please, Enter a Valid Amount", zicon);
             return;
         }
+        BigDecimal b1 = new BigDecimal(jbal.replaceAll(",",""));
+        BigDecimal b2 = new BigDecimal(zvBalan);
+        BigDecimal b3 = new BigDecimal(ztrAmount);
 
-        BigDecimal b1 = new BigDecimal(zvBalan);
-        BigDecimal b2 = new BigDecimal(ztrAmount);
-        b1 = b1.subtract(b2);
-        BigDecimal b3 = b1.setScale(2, BigDecimal.ROUND_UP); //** two decimalplaces
+        xbig = b2.compareTo(b3);
+        if (xbig == 0) {      //*** b2 and b3 are equal
+            b1 = b2.subtract(b3);
+        }
+        if (xbig == 1) {      //*** b2 greater than b3
+            b1 = b2.subtract(b3);
+        }
+
+        if (xbig == -1) {    //*** b3 greater than b2
+            Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
+            zMessage("Error ! - Invalit Amount", "Trans. Amount cannot be greater that Balance", zicon);
+            return;
+        }
 
         //Double jBalance = xBalan + xAmount;
-        String runBalance = String.valueOf(b3); //convert to String
+        BigDecimal b5 = b1.setScale(2, BigDecimal.ROUND_UP);
+        String runBalance = String.valueOf(b5); //convert to String
 
         String ztrAcct = zvAcct;
         String ztrDate = trDate.getText().toString().trim();
@@ -281,6 +294,20 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
         tr_tipos.setSelection(0);
         trAmount.setText("");
         trNotes.setText("");
+        TextView trDate = (TextView) findViewById(R.id.trDate);
+        //****** Sets the current date - Date Dialog **********
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");  //current date
+        trDate.setText(sdf.format(new Date()));
+        trDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateDialog dialog = new DateDialog(v);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                dialog.show(ft, "Date Picker");
+            }
+
+        });
+
         trAmount.requestFocus();
     }
 
@@ -334,7 +361,7 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
     }
     private void zabout() {
         Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.zxitt, null);
-        zMessage("Captstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);
+        zMessage("Capstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);
         return;
     }
 
