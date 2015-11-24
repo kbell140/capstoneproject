@@ -17,7 +17,7 @@
     <string name="afname">First Name:</string>
     <string name="alname">Last Name:</string>
     <string name="abname">Bank Name:</string>
-    <string name="abalance">Starting Balance:</string>
+    <string name="abalance">Start Balance:</string>
     <string name="adate">Date:</string>
     <string name="rbalance">Running Balance:</string>
     <string name="dateformat">mm/dd/yyyy</string>

@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +27,8 @@ import java.util.Date;
 
 /**
  * Created by Julio C. on 10/27/2015
+ * Capstone Project - ITT-Tech Westminster CO * Sep - Dec - 2105
+ * ==== Julio C. =====
  */
 public class Transactions extends AppCompatActivity implements View.OnClickListener {
 
@@ -104,23 +105,6 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
             tranInsert();
         }
 
-/*
-        if (v == btnView) {
-            TextView vAcct = (TextView) findViewById(R.id.zAcct);
-            TextView vfname = (TextView) findViewById(R.id.zOwner);
-            TextView vBalan = (TextView) findViewById(R.id.trBalance);
-            zvBalan = vBalan.getText().toString().trim();
-            String jbal = zvBalan.substring(1);
-
-            Intent dlist = new Intent(Transactions.this, TransLista.class);
-            dlist.putExtra("xaccount", vAcct.getText().toString());
-            dlist.putExtra("xfname", vfname.getText().toString());
-            dlist.putExtra("xbalan", jbal);
-            startActivity(dlist);
-            finish();
-        }
-*/
-
     } //***** End of onCreate *****
 
     //***** Transaction functions *******
@@ -151,11 +135,11 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
         TextView trDate = (TextView) findViewById(R.id.trDate);
 
         String ztrAmount = trAmount.getText().toString().trim();
-      //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
+        //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
 
         if (trAmount.getText().toString().trim().length() == 0) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - Transaction Amount", "Please, Enter a Valid Amount", zicon);
+            zMessage("Error ! " + "\n" + "Transaction Amount", "Please, Enter a Valid Amount", zicon);
             return;
         }
 
@@ -190,7 +174,7 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
         Cursor z = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
         if (z.moveToFirst()) {
             zb.execSQL("UPDATE account SET runBalance='" + runBalance + "' WHERE acctNumber='" + vAcct.getText() + "'");
-         //   Toast.makeText(this, "Run Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
+            //   Toast.makeText(this, "Run Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
         }
 
         //********* TO Transactions List *******
@@ -212,10 +196,10 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
 
         if (trAmount.getText().toString().trim().length() == 0) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - Transaction Amount", "Please, Enter a Valid Amount", zicon);
+            zMessage("Error ! " + "\n" + "Transaction Amount", "Please, Enter a Valid Amount", zicon);
             return;
         }
-        BigDecimal b1 = new BigDecimal(jbal.replaceAll(",",""));
+        BigDecimal b1 = new BigDecimal(jbal.replaceAll(",", ""));
         BigDecimal b2 = new BigDecimal(zvBalan);
         BigDecimal b3 = new BigDecimal(ztrAmount);
 
@@ -262,7 +246,7 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
         Cursor z = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
         if (z.moveToFirst()) {
             zb.execSQL("UPDATE account SET runBalance='" + runBalance + "' WHERE acctNumber='" + vAcct.getText() + "'");
-       //     Toast.makeText(this, "Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
+            //     Toast.makeText(this, "Balance Was UPDATED ! " + zBal + " " + runBalance, Toast.LENGTH_LONG).show();
         }
 
         //********* TO Transactions List *******
@@ -288,8 +272,11 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
 
         startActivity(iput);
        // finish();
-    } /*//*** End of Transactions Class
-*/
+    } /*/
+
+    /***
+     * End of Transactions Class
+     */
     public void clearTransScrn() {
         tr_tipos.setSelection(0);
         trAmount.setText("");
@@ -312,20 +299,28 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
     }
 
     //***** Message Function *******
-    public void zMessage(String title, String message, Drawable zicon)
-    {
-        AlertDialog alertDialog = new AlertDialog.Builder(Transactions.this).create();
-        alertDialog.setTitle(title);
-        alertDialog.setCancelable(false);
-        alertDialog.setMessage(message);
-        alertDialog.setIcon(zicon);
-        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
+    public void zMessage(String title, String message, Drawable zicon) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //*** The Yes button was clicked
+
+                        break;
+                    //  case DialogInterface.BUTTON_NEGATIVE:
+                    //*** The No button was clicked
+                    //     break;
+                }
+            }
+        };
+
+        android.app.AlertDialog.Builder jmessa = new android.app.AlertDialog.Builder(Transactions.this);
+        jmessa.setTitle(title);
+        jmessa.setIcon(zicon);
+        jmessa.setCancelable(false);
+        jmessa.setMessage(message)
+                .setPositiveButton("OK", dialogClickListener).show();
     }
 
     @Override
@@ -359,6 +354,7 @@ public class Transactions extends AppCompatActivity implements View.OnClickListe
         return true;
 
     }
+
     private void zabout() {
         Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.zxitt, null);
         zMessage("Capstone Project" + "\n" + "** Sep - Dec 2015 **", "Created by:" + "\n" + "Julio Casachagua", zicon);

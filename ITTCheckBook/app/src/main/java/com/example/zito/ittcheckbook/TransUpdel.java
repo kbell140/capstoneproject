@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +25,8 @@ import java.util.Date;
 
 /**
  * Created by Zito on 11/9/2015.
+ * Capstone Project - ITT-Tech Westminster CO * Sep - Dec - 2105
+ * ==== Julio C. =====
  */
 public class TransUpdel extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,7 +34,7 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
     Button btnUpdate, btnDelete;
 
     Long jz_id;
-    int zbig;
+    int zbig, jbig;
 
     String zvAcct = "";
     String zvBalan = "";
@@ -181,17 +182,6 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
         String ztrAmount = jAmount.getText().toString().trim();
         String ztrNotes = jNotes.getText().toString().trim();
 
-
-        Cursor z = zb.rawQuery("SELECT * FROM transactions WHERE _id ='" + jz_id + "'", null);
-        if (z.moveToFirst()) {
-            zb.execSQL("UPDATE transactions SET tranAmount='" + ztrAmount
-                    + "',tranDate='" + ztrDate + "',tranNotes='" + ztrNotes
-                    + "' WHERE _id='" + jz_id + "'");
-
-            Toast.makeText(this, "Transaction Was UPDATED !!", Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(this, "Invalid Transaction !!", Toast.LENGTH_SHORT).show();
-
-
         //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
         BigDecimal b1 = new BigDecimal(jbal.replaceAll(",", ""));
         BigDecimal b2 = new BigDecimal(ztrAmount);
@@ -204,13 +194,22 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
         }
         if (zbig == 1) {
             BigDecimal b4 = b2.subtract(b3); //*** b2 greater than b3
-            b1 = b1.subtract(b4);
+            b1 = b1.add(b4);
         }
 
         if (zbig == -1) {
             BigDecimal b4 = b3.subtract(b2);  //*** b3 greater than b2
-            b1 = b1.add(b4);
+            b1 = b1.subtract(b4);
         }
+
+        Cursor z = zb.rawQuery("SELECT * FROM transactions WHERE _id ='" + jz_id + "'", null);
+        if (z.moveToFirst()) {
+            zb.execSQL("UPDATE transactions SET tranAmount='" + ztrAmount
+                    + "',tranDate='" + ztrDate + "',tranNotes='" + ztrNotes
+                    + "' WHERE _id='" + jz_id + "'");
+
+            Toast.makeText(this, "Transaction Was UPDATED !!", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(this, "Invalid Transaction !!", Toast.LENGTH_SHORT).show();
 
         BigDecimal b5 = b1.setScale(2, BigDecimal.ROUND_UP);
 
@@ -251,21 +250,23 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
         String ztrAmount = jAmount.getText().toString().trim();
         String ztrNotes = jNotes.getText().toString().trim();
 
-
-        Cursor z = zb.rawQuery("SELECT * FROM transactions WHERE _id ='" + jz_id + "'", null);
-        if (z.moveToFirst()) {
-            zb.execSQL("UPDATE transactions SET tranAmount='" + ztrAmount
-                    + "',tranDate='" + ztrDate + "',tranNotes='" + ztrNotes
-                    + "' WHERE _id='" + jz_id + "'");
-
-            Toast.makeText(this, "Transaction Was UPDATED !!", Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(this, "Invalid Transaction !!", Toast.LENGTH_SHORT).show();
-
-
         //  Double xAmount = Double.parseDouble(ztrAmount);  //Convert to Double
         BigDecimal b1 = new BigDecimal(jbal.replaceAll(",", ""));
         BigDecimal b2 = new BigDecimal(ztrAmount);
         BigDecimal b3 = new BigDecimal(zvamount);
+        jbig = b1.compareTo(b2);
+        if (jbig == -1) {
+            Toast.makeText(this, "Debit Amount cannot be greater than Balance", Toast.LENGTH_SHORT).show();
+            //***** To Transactions List ********
+            Intent dlist = new Intent(TransUpdel.this, TransLista.class);
+            dlist.putExtra("xaccount", vAcct.getText().toString());
+            dlist.putExtra("xfname", vfname.getText().toString());
+            dlist.putExtra("xbalan", jbal);
+            startActivity(dlist);
+            finish();
+            return;
+
+        }
         zbig = b2.compareTo(b3);
         if (zbig == 0) {      //*** b2 and b3 are equal
             // BigDecimal b5 = b1.setScale(2, BigDecimal.ROUND_UP);
@@ -285,6 +286,15 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
         BigDecimal b5 = b1.setScale(2, BigDecimal.ROUND_UP);
 
         String runBalance = String.valueOf(b5); //convert to String
+
+        Cursor z = zb.rawQuery("SELECT * FROM transactions WHERE _id ='" + jz_id + "'", null);
+        if (z.moveToFirst()) {
+            zb.execSQL("UPDATE transactions SET tranAmount='" + ztrAmount
+                    + "',tranDate='" + ztrDate + "',tranNotes='" + ztrNotes
+                    + "' WHERE _id='" + jz_id + "'");
+
+            Toast.makeText(this, "Transaction Was UPDATED !!", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(this, "Invalid Transaction !!", Toast.LENGTH_SHORT).show();
 
         Cursor zup = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
         if (zup.moveToFirst()) {
@@ -333,7 +343,6 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
                             String runBalance = String.valueOf(b3); //convert to String
 
                             //*** Updating Account Balance
-                            //Cursor zup = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
                             Cursor zup = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + dvAcct + "'", null);
                             if (zup.moveToFirst()) {
                                 zb.execSQL("UPDATE account SET runBalance='" + runBalance + "' WHERE acctNumber='" + dvAcct + "'");
@@ -342,10 +351,8 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
 
                             //***** To Transactions List ********
                             Intent dlist = new Intent(TransUpdel.this, TransLista.class);
-                            // dlist.putExtra("xaccount", vAcct.getText().toString());
-                            // dlist.putExtra("xfname", vfname.getText().toString());
-                            dlist.putExtra("xbalan", dvAcct);
-                            dlist.putExtra("xbalan", dvfname);
+                            dlist.putExtra("xaccount", dvAcct);
+                            dlist.putExtra("xfname", dvfname);
                             dlist.putExtra("xbalan", runBalance);
                             startActivity(dlist);
                             finish();
@@ -360,8 +367,8 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
                             Intent jdlist = new Intent(TransUpdel.this, TransLista.class);
                             // dlist.putExtra("xaccount", vAcct.getText().toString());
                             // dlist.putExtra("xfname", vfname.getText().toString());
-                            jdlist.putExtra("xbalan", dvAcct);
-                            jdlist.putExtra("xbalan", dvfname);
+                            jdlist.putExtra("xaccount", dvAcct);
+                            jdlist.putExtra("xfname", dvfname);
                             jdlist.putExtra("xbalan", dbal);
                             startActivity(jdlist);
                             finish();
@@ -424,7 +431,6 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
                             String runBalance = String.valueOf(b3); //convert to String
 
                             //*** Updating Account Balance
-                            //Cursor zup = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + vAcct.getText() + "'", null);
                             Cursor zup = zb.rawQuery("SELECT runBalance FROM account WHERE acctNumber ='" + jvAcct + "'", null);
                             if (zup.moveToFirst()) {
                                 zb.execSQL("UPDATE account SET runBalance='" + runBalance + "' WHERE acctNumber='" + jvAcct + "'");
@@ -435,8 +441,8 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
                             Intent dlist = new Intent(TransUpdel.this, TransLista.class);
                             // dlist.putExtra("xaccount", vAcct.getText().toString());
                             // dlist.putExtra("xfname", vfname.getText().toString());
-                            dlist.putExtra("xbalan", jvAcct);
-                            dlist.putExtra("xbalan", jvfname);
+                            dlist.putExtra("xaccount", jvAcct);
+                            dlist.putExtra("xfname", jvfname);
                             dlist.putExtra("xbalan", runBalance);
                             startActivity(dlist);
                             finish();
@@ -451,8 +457,8 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
                             Intent jdlist = new Intent(TransUpdel.this, TransLista.class);
                             // dlist.putExtra("xaccount", vAcct.getText().toString());
                             // dlist.putExtra("xfname", vfname.getText().toString());
-                            jdlist.putExtra("xbalan", jvAcct);
-                            jdlist.putExtra("xbalan", jvfname);
+                            jdlist.putExtra("xaccount", jvAcct);
+                            jdlist.putExtra("xfname", jvfname);
                             jdlist.putExtra("xbalan", jbal);
                             startActivity(jdlist);
                             finish();
@@ -481,6 +487,29 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
     } //*** End DEBIT from Delete button ******
 
     public void zMessage(String title, String message, Drawable zicon) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //*** The Yes button was clicked
+
+                        break;
+                    //  case DialogInterface.BUTTON_NEGATIVE:
+                    //*** The No button was clicked
+                    //     break;
+                }
+            }
+        };
+
+        android.app.AlertDialog.Builder jmessa = new android.app.AlertDialog.Builder(TransUpdel.this);
+        jmessa.setTitle(title);
+        jmessa.setIcon(zicon);
+        jmessa.setCancelable(false);
+        jmessa.setMessage(message)
+                .setPositiveButton("OK", dialogClickListener).show();
+
+/*
         AlertDialog alertDialog = new AlertDialog.Builder(TransUpdel.this).create();
         alertDialog.setTitle(title);
         alertDialog.setCancelable(false);
@@ -493,6 +522,7 @@ public class TransUpdel extends AppCompatActivity implements View.OnClickListene
                     }
                 });
         alertDialog.show();
+*/
     }
 
 

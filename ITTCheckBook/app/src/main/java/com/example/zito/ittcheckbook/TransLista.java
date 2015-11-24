@@ -16,6 +16,8 @@ import java.text.DecimalFormat;
 
 /**
  * Created by Julio C. on 11/7/2015.
+ * Capstone Project - ITT-Tech Westminster CO * Sep - Dec - 2105
+ * ==== Julio C. =====
  */
 public class TransLista extends AppCompatActivity {
     Button btnAdd;
@@ -97,15 +99,6 @@ public class TransLista extends AppCompatActivity {
                 String jc_acct = jtacct.getText().toString();
                 String jc_type = jttype.getText().toString();
                 String jc_amount = jtamount.getText().toString();
-//
-//                //zvBalan = vBalan.getText().toString().trim();
-//                jc_amount = jc_amount.replace(",","");
-//
-//                Double xamount = Double.parseDouble(jc_amount);
-//                DecimalFormat zcur = new DecimalFormat("$###,###.##");
-//                String zBal = zcur.format(xamount);
-//                jtamount.setText(zBal);
-//           //     jtamount = (TextView) view.findViewById(R.id.z_tamount);
 
                 String jc_date = jtdate.getText().toString();
                 String jc_notes = jtnotes.getText().toString();
@@ -115,7 +108,7 @@ public class TransLista extends AppCompatActivity {
                 //iput.putExtra("xaccount", vAcct);
                 iput.putExtra("xaccount", jc_acct);
                 iput.putExtra("xfname", vfname);
-               // iput.putExtra("xbalan", vBalan);
+                // iput.putExtra("xbalan", vBalan);
                 iput.putExtra("xbalan", zvBalan);
                 iput.putExtra("xtype", jc_type);
                 iput.putExtra("xamount", jc_amount);
@@ -123,8 +116,6 @@ public class TransLista extends AppCompatActivity {
                 iput.putExtra("xnotes", jc_notes);
 
                 startActivity(iput);
-
-
             }
         });
     }

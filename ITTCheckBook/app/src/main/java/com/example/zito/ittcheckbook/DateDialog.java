@@ -12,28 +12,31 @@ import java.util.Calendar;
 
 /**
  * Created by Zito on 11/4/2015.
+ * Capstone Project - ITT-Tech Westminster CO * Sep - Dec - 2105
+ * ==== Julio C. =====
  */
 public class DateDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    TextView trDate,jrDate;
+    TextView trDate, jrDate;
     TextView acctDate;
+
     public DateDialog(View view) {
 
-        trDate=(TextView)view;
-        acctDate=(TextView)view;
-        jrDate=(TextView)view;
+        trDate = (TextView) view;
+        acctDate = (TextView) view;
+        jrDate = (TextView) view;
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Calendar c=Calendar.getInstance();
-        int year=c.get(Calendar.YEAR);
-        int month=c.get(Calendar.MONTH);
-        int day=c.get(Calendar.DAY_OF_MONTH);
+        final Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        String date = ((month+1) + "/" + day + "/" + year);
+        String date = ((month + 1) + "/" + day + "/" + year);
         acctDate.setText(date);
         trDate.setText(date);
         jrDate.setText(date);

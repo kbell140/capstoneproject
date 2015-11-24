@@ -23,7 +23,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Julio C. on 10/13/2015  *** Updated 11/01/2015.
+ * Created by Julio C. on 10/13/2015
+ * Capstone Project - ITT-Tech Westminster CO * Sep - Dec - 2105
+ * ==== Julio C. =====
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -74,10 +76,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // *** Calling Listners  *****
         btnAdd.setOnClickListener(this);
-        // btnView.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-        //  btnList.setOnClickListener(this);
     }
 
     @Override
@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //***** Add Records *****
         if (v == btnAdd) {
             insert();
+            //   jviewRec();
+            //   jtransa();
             clearText();
 
         }
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             TextView acctDate = (TextView) findViewById(R.id.acctDate);
             if (acctNumber.getText().toString().trim().length() == 0) {
                 Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-                zMessage("Error ! - Invalid Account #", "Please, Enter a Valid ACCT #", zicon);
+                zMessage("Error ! - Invalid Account", "Please, Enter a Valid ACCT #", zicon);
                 return;
             }
 
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v == btnDelete) {
             if (acctNumber.getText().toString().trim().length() == 0) {
                 Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-                zMessage("Error ! - Invalid Account #", "Please, Enter a Valid ACCT #", zicon);
+                zMessage("Error ! - Invalid Account", "Please, Enter a Valid ACCT #", zicon);
                 return;
             }
 
@@ -174,22 +176,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        TextView acctDate = (TextView) findViewById(R.id.acctDate);
+        Cursor z = zb.rawQuery("SELECT * FROM account WHERE acctNumber ='" + acctNumber.getText() + "'", null);
+        if (z.moveToFirst()) {
 
-        String actnumber = acctNumber.getText().toString().trim();
-        String fname = firstName.getText().toString().trim();
-        String lname = lastName.getText().toString().trim();
-        String bkname = bankName.getText().toString().trim();
-        String bkbalance = bankBalance.getText().toString().trim();
-        String rr = bkbalance;
-        String rnbalance = rr;
-        String actdate = acctDate.getText().toString().trim();
-        // String rnbalance = runBalance.getText().toString().trim();
-        String actnotes = acctNotes.getText().toString().trim();
-        db.addAccount(actnumber, fname, lname, bkname, bkbalance, actdate, rnbalance, actnotes);
-        Toast.makeText(this, "The Account was created !", Toast.LENGTH_SHORT).show();
-        acctDate.setText("");
+            Toast.makeText(this, "Account Already in Database", Toast.LENGTH_SHORT).show();
+        } else {
+
+            //Toast.makeText(this, "Invalid Account Number !!", Toast.LENGTH_SHORT).show();
+
+            TextView acctDate = (TextView) findViewById(R.id.acctDate);
+
+            String actnumber = acctNumber.getText().toString().trim();
+            String fname = firstName.getText().toString().trim();
+            String lname = lastName.getText().toString().trim();
+            String bkname = bankName.getText().toString().trim();
+            String bkbalance = bankBalance.getText().toString().trim();
+            String rr = bkbalance;
+            String rnbalance = rr;
+            String actdate = acctDate.getText().toString().trim();
+            // String rnbalance = runBalance.getText().toString().trim();
+            String actnotes = acctNotes.getText().toString().trim();
+            db.addAccount(actnumber, fname, lname, bkname, bkbalance, actdate, rnbalance, actnotes);
+            Toast.makeText(this, "The Account was created !", Toast.LENGTH_SHORT).show();
+            acctDate.setText("");
+        }
     }
+
 
     //***** Clear fields from screen  *****
     public void clearText() {
@@ -319,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lastName.getText().toString().trim().length() == 0 ||
                 bankName.getText().toString().trim().length() == 0) {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.warning, null);
-            zMessage("Alert ! - Missing Values", "Please get all fields values", zicon);
+            zMessage("Alert ! - Missing Values", "Please enter all fields values", zicon);
             return;
         }
         //***** Check database before transactions *****
@@ -336,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } else {
             Drawable zicon = ResourcesCompat.getDrawable(getResources(), R.drawable.error, null);
-            zMessage("Error ! - Invalid Data", "Please get all fields values", zicon);
+            zMessage("Error ! - Invalid Data", "Please enter all fields values", zicon);
             clearText();
         }
     }

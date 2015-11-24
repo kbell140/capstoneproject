@@ -41,10 +41,10 @@ public class Zacct_Helper extends SQLiteOpenHelper {
 
     //***=================
     public static final String TABLE_ACCOUNT = "CREATE TABLE " + TABLE_NAME
-                + "(" + ACCT_NUMBER + " INTEGER PRIMARY KEY,"
-                + FIRST_NAME + " TEXT," + LAST_NAME + " TEXT," + BANK_NAME + " TEXT,"
-                + BANK_BALANCE + " DOUBLE," + ACCT_DATE + " TEXT,"
-                + RUN_BALANCE + " DOUBLE," + ACCT_NOTES + " TEXT);";
+            + "(" + ACCT_NUMBER + " INTEGER PRIMARY KEY,"
+            + FIRST_NAME + " TEXT," + LAST_NAME + " TEXT," + BANK_NAME + " TEXT,"
+            + BANK_BALANCE + " DOUBLE," + ACCT_DATE + " TEXT,"
+            + RUN_BALANCE + " DOUBLE," + ACCT_NOTES + " TEXT);";
 
     public static final String TABLE_TRANS = "CREATE TABLE " + TRTABLE_NAME
             + "(" + TRAN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -59,17 +59,17 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         db.execSQL(TABLE_TRANS);
     }
 
-        //**** Delete the table and create a new table - if needed
+    //**** Delete the table and create a new table - if needed
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-   //     String sql = ("DROP TABLE IF EXISTS " + TABLE_ACCOUNT);
-     //   String sql_tr = ("DROP TABLE IF EXISTS " + TABLE_TRANS);
+        //     String sql = ("DROP TABLE IF EXISTS " + TABLE_ACCOUNT);
+        //   String sql_tr = ("DROP TABLE IF EXISTS " + TABLE_TRANS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TRTABLE_NAME);
         onCreate(db);
     }
 
-        //**** Enter records
+    //**** Enter records
     public boolean addAccount(String actnumber, String fname, String lname, String bkname,
                               String bkbalance, String actdate, String rnbalance, String actnotes) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -84,12 +84,12 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         contentValues.put(ACCT_NOTES, actnotes);
 
         db.insert(TABLE_NAME, null, contentValues);
-       // db.close();
+        // db.close();
         return true;
     }
 
     //****** TRANSACTIONS ******
-    public boolean addtrans(String ztrAcct, String ztrType, String ztrAmount, String ztrDate,String ztrNotes) {
+    public boolean addtrans(String ztrAcct, String ztrType, String ztrAmount, String ztrDate, String ztrNotes) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(TRAN_ACTN, ztrAcct);
@@ -106,7 +106,7 @@ public class Zacct_Helper extends SQLiteOpenHelper {
     public Cursor readData() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String[] allCols = new String[] {
+        String[] allCols = new String[]{
                 TRAN_ID, TRAN_ACTN, TRAN_TYPE, TRAN_AMOUNT, TRAN_DATE, TRAN_NOTES};
 
         Cursor c = db.query(TRTABLE_NAME, allCols, null, null, null, null, null);
@@ -115,6 +115,4 @@ public class Zacct_Helper extends SQLiteOpenHelper {
         }
         return c;
     }
-
-
 }
